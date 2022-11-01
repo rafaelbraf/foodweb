@@ -1,0 +1,313 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
+package com.mycompany.foodweb.View.Pedidos;
+
+import com.mycompany.foodweb.Model.Cliente;
+import com.mycompany.foodweb.Model.Pedido;
+import com.mycompany.foodweb.Service.ClienteService;
+import com.mycompany.foodweb.Service.PedidoService;
+import java.awt.Color;
+import java.awt.Font;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
+public class JifPedidos extends javax.swing.JInternalFrame {
+
+    private static JifPedidos internalFramePedidos;
+    private static Long idRestauranteRecuperado;
+    
+    public static JifPedidos getInstancia(Long idRestaurante) {
+        if (internalFramePedidos == null) {
+            internalFramePedidos = new JifPedidos(idRestaurante);
+        }
+        idRestauranteRecuperado = idRestaurante;
+        return internalFramePedidos;
+    }
+    
+    public JifPedidos(Long idRestaurante) {
+        initComponents();
+        this.setTitle("Pedidos");
+        this.setSize(1200, 680);
+        tabelaPedidosAguardandoAprovacao.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tabelaPedidosAguardandoAprovacao.getTableHeader().setOpaque(false);
+        tabelaPedidosAguardandoAprovacao.getTableHeader().setBackground(new Color(32, 136, 203));
+        tabelaPedidosAguardandoAprovacao.getTableHeader().setForeground(Color.WHITE);
+        tabelaPedidosAguardandoAprovacao.setRowHeight(25);
+        tabelaPedidosAguardandoAprovacao.setShowVerticalLines(false);
+        preenchePedidosNaTabela(idRestaurante);
+    }
+    
+    public void preenchePedidosNaTabela(Long idRestaurante) {
+        
+        PedidoService pedidoService = new PedidoService();
+        ClienteService clienteService = new ClienteService();
+        Pedido[] listaPedidos = pedidoService.listarTodosOsPedidos(idRestaurante);
+        
+        DefaultTableModel tabela = (DefaultTableModel) tabelaPedidosAguardandoAprovacao.getModel();        
+        tabela.setRowCount(0);
+        
+        TableCellRenderer renderCelula = new AlinharConteudoCentro();
+        TableColumn colunaCodigo = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(0);
+        TableColumn colunaDataHora = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(1);
+        TableColumn colunaNomeCliente = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(2);
+        TableColumn colunaTelefoneCliente = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(3);
+        TableColumn colunaStatusPedido = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(5);
+        TableColumn colunaValorTotal = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(6);
+        
+        colunaCodigo.setCellRenderer(renderCelula);
+        colunaDataHora.setCellRenderer(renderCelula);
+        colunaNomeCliente.setCellRenderer(renderCelula);
+        colunaTelefoneCliente.setCellRenderer(renderCelula);
+        colunaStatusPedido.setCellRenderer(renderCelula);
+        colunaValorTotal.setCellRenderer(renderCelula);
+        
+        if (listaPedidos == null) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar pedidos.");
+        } else {
+            
+            int idCliente;
+            
+            for (var i = 0; i < listaPedidos.length; i++) {
+
+                String codigoPedido = listaPedidos[i].getCodigo();
+                idCliente = listaPedidos[i].getIdCliente();
+                Cliente cliente = clienteService.pegaClientePorId(idCliente);                
+                String dataHora = listaPedidos[i].getData() + " - " + listaPedidos[i].getHora();
+                int idPedido = listaPedidos[i].getIdPedido();
+                Double valorTotal = listaPedidos[i].getValorTotal();
+                
+                tabela.addRow(new Object[] {
+                    codigoPedido,
+                    dataHora,
+                    cliente.getNome(),
+                    cliente.getTelefone(),
+                    cliente.getEndereco(),
+                    idPedido,
+                    valorTotal
+                });
+                
+            }
+            
+        }
+        
+    }
+    
+    class AlinharConteudoCentro extends DefaultTableCellRenderer {
+        public AlinharConteudoCentro() {
+            setHorizontalAlignment(CENTER);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaPedidosAguardandoAprovacao = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+
+        setPreferredSize(new java.awt.Dimension(1052, 538));
+
+        jButton1.setText("Editar Pedido");
+
+        jButton2.setText("Novo Pedido");
+
+        jLabel1.setText("Pesquisar pedido");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(132, 132, 132))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jButton2)
+                    .addContainerGap(887, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 31, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        tabelaPedidosAguardandoAprovacao.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tabelaPedidosAguardandoAprovacao);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Aguardando aprovação", jPanel2);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1014, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Em andamento", jPanel3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1014, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Aguardando Entregador", jPanel4);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1014, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Em Rota de Entrega", jPanel5);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1014, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Concluídos", jPanel6);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jTabbedPane1)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tabelaPedidosAguardandoAprovacao;
+    // End of variables declaration//GEN-END:variables
+}

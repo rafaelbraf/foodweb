@@ -1,0 +1,5 @@
+com\mycompany\foodweb\Model\Pedido.class
+com\mycompany\foodweb\Model\Restaurante.class
+com\mycompany\foodweb\Model\Cliente.class
+com\mycompany\foodweb\FoodWeb.class
+com\mycompany\foodweb\Model\Produto.class
