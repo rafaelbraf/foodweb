@@ -1,8 +1,13 @@
 package com.mycompany.foodweb.Service;
 
 import com.google.gson.Gson;
+import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.JOptionPane;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -66,6 +71,41 @@ public class RestauranteService {
         }
         
         return restauranteLogado;
+    }
+    
+    public Produto[] listaProdutosDoRestaurante(Long idRestaurante) {
+        
+        try {
+            
+            String url = "http://localhost:3001/restaurantes/" + idRestaurante + "/produtos";
+            
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                System.out.println("Erro " + conn.getResponseCode() + " ao tentar obter os dados da url: " + url);
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String output = "";
+            String line;
+            while((line = br.readLine()) != null) {
+                output += line;
+            }
+            System.out.println("Output: " + output);
+            
+            conn.disconnect();
+            
+            Gson gson = new Gson();
+            Produto[] listaProdutos = gson.fromJson(output, Produto[].class);
+            return listaProdutos;
+            
+        } catch(IOException exception) {
+            System.out.println("Erro: " + exception.getMessage());
+        }
+        
+        return null;
+        
     }
     
 }

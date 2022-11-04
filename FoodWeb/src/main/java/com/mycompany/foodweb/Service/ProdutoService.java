@@ -134,13 +134,7 @@ public class ProdutoService {
     
     public int atualizaProdutoPorId(Produto produto) {
         
-        String nome = produto.getNome();
-        String categoria = produto.getCategoria();
-        String descricao = produto.getDescricao();
-        String quantidade = produto.getQuantidade();
-        String valorUnitario = produto.getValorUnitario();
-        
-        Produto produto1 = new Produto(nome, descricao, categoria, quantidade, valorUnitario);
+        Produto produto1 = new Produto();
         
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         int statusCode = 0;
@@ -150,7 +144,7 @@ public class ProdutoService {
             Gson gson = new Gson();
             String produtoJson = gson.toJson(produto1);
             
-            HttpPut request = new HttpPut("http://localhost:3001/produto/" + produto.getIdProduto());
+            HttpPut request = new HttpPut("http://localhost:3001/produto/" + produto.getId());
             request.setHeader("Content-Type", "application/json");
             
             HttpEntity entity = new ByteArrayEntity(produtoJson.getBytes("UTF-8"));

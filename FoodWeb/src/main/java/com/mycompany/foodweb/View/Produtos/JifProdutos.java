@@ -8,6 +8,7 @@ import com.mycompany.foodweb.View.Produtos.JifEditarProduto;
 import com.mycompany.foodweb.View.Produtos.JifCadastrarProduto;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Service.ProdutoService;
+import com.mycompany.foodweb.Service.RestauranteService;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JOptionPane;
@@ -45,7 +46,9 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     public void preencherProdutosNaTabela(Long idRestaurante) {
         
         ProdutoService produtoService = new ProdutoService();
-        Produto[] listaProdutos = produtoService.listarTodosOsProdutos(idRestaurante);
+        RestauranteService restauranteService = new RestauranteService();
+        //Produto[] listaProdutos = produtoService.listarTodosOsProdutos(idRestaurante);
+        Produto[] listaProdutos = restauranteService.listaProdutosDoRestaurante(idRestaurante);
         DefaultTableModel tabela = (DefaultTableModel) tabelaProdutos.getModel();
         
         tabela.setRowCount(0);
@@ -57,13 +60,11 @@ public class JifProdutos extends javax.swing.JInternalFrame {
             for (var i = 0; i < listaProdutos.length; i++) {
 
                 tabela.addRow(new Object[]{
-                    listaProdutos[i].getIdProduto(),
+                    listaProdutos[i].getId(),
                     listaProdutos[i].getNome(),
                     listaProdutos[i].getDescricao(),
-                    listaProdutos[i].getCategoria(),
-                    Double.parseDouble(listaProdutos[i].getValorUnitario()),
-                    Integer.parseInt(listaProdutos[i].getQuantidade()),
-                    listaProdutos[i].getRestaurante()
+                    "",
+                    listaProdutos[i].getPreco(),
                 });
 
             }

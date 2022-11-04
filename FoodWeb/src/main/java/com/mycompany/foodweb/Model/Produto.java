@@ -2,96 +2,70 @@ package com.mycompany.foodweb.Model;
 
 public class Produto {
     
-    int idProduto;
+    int id;
     String nome;
     String descricao;
-    String categoria;
-    String quantidade;
-    String valorUnitario;
-    String restaurante;
+    Double preco;
+    String imgUrl;    
+    Restaurante restaurante;
 
     public Produto() {
     }
-    
-    public Produto(int idProduto, String nome, String descricao, String categoria, String quantidade, String valorUnitario) {
-        this.idProduto = idProduto;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.categoria = categoria;
-        this.quantidade = quantidade;
-        this.valorUnitario = valorUnitario;
-    }
-    
-    public Produto(String nome, String descricao, String categoria, String quantidade, String valorUnitario) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.categoria = categoria;
-        this.quantidade = quantidade;
-        this.valorUnitario = valorUnitario;
-    }
 
-    public Produto(String nome, String descricao, String categoria, String quantidade, String valorUnitario, String restaurante) {
+    public Produto(int id, String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante) {
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.categoria = categoria;
-        this.quantidade = quantidade;
-        this.valorUnitario = valorUnitario;
+        this.preco = preco;
+        this.imgUrl = imgUrl;
         this.restaurante = restaurante;
     }
 
-    public int getIdProduto() {
-        return idProduto;
+    public int getId() {
+        return id;
     }
 
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nomeProduto) {
-        this.nome = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricaoProduto) {
-        this.descricao = descricaoProduto;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public Double getPreco() {
+        return preco;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setPreco(Double preco) {
+        this.preco = preco;
     }
 
-    public String getQuantidade() {
-        return quantidade;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setQuantidade(String quantidade) {
-        this.quantidade = quantidade;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
-    public String getValorUnitario() {
-        return valorUnitario;
-    }
-
-    public void setValorUnitario(String valorUnitario) {
-        this.valorUnitario = valorUnitario;
-    }
-
-    public String getRestaurante() {
+    public Restaurante getRestaurante() {
         return restaurante;
     }
 
-    public void setRestaurante(String restaurante) {
+    public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
     }
     
