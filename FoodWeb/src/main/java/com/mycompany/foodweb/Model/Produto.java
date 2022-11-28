@@ -1,5 +1,7 @@
 package com.mycompany.foodweb.Model;
 
+import java.util.List;
+
 public class Produto {
     
     int id;
@@ -8,25 +10,28 @@ public class Produto {
     Double preco;
     String imgUrl;    
     Restaurante restaurante;
+    List<Categoria> categorias;
 
     public Produto() {
     }
     
-    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante) {
+    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante, List<Categoria> categorias) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.imgUrl = imgUrl;
         this.restaurante = restaurante;
+        this.categorias = categorias;
     }
 
-    public Produto(int id, String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante) {
+    public Produto(int id, String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante, List<Categoria> categorias) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.imgUrl = imgUrl;
         this.restaurante = restaurante;
+        this.categorias = categorias;
     }
 
     public int getId() {

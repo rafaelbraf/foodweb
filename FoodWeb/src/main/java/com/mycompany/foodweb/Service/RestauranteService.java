@@ -1,5 +1,6 @@
 package com.mycompany.foodweb.Service;
 
+import Util.Constants;
 import com.google.gson.Gson;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
@@ -72,7 +73,7 @@ public class RestauranteService {
         
         try {
             
-            String url = "http://localhost:3001/restaurantes/" + idRestaurante;
+            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante;
             
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
@@ -106,7 +107,7 @@ public class RestauranteService {
         
         try {
             
-            String url = "http://localhost:3001/restaurantes/" + idRestaurante + "/produtos";
+            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos";
             
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
