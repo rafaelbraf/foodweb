@@ -11,6 +11,14 @@ public class Produto {
 
     public Produto() {
     }
+    
+    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.imgUrl = imgUrl;
+        this.restaurante = restaurante;
+    }
 
     public Produto(int id, String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante) {
         this.id = id;

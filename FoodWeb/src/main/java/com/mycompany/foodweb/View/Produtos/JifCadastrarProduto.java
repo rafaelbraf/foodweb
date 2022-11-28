@@ -6,7 +6,9 @@ package com.mycompany.foodweb.View.Produtos;
 
 import Util.GerenteDeJanelas;
 import com.mycompany.foodweb.Model.Produto;
+import com.mycompany.foodweb.Model.Restaurante;
 import com.mycompany.foodweb.Service.ProdutoService;
+import com.mycompany.foodweb.Service.RestauranteService;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +19,9 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
     
     GerenteDeJanelas gerenteDeJanelas;
     Long idRestauranteRecuperado;
+    
+    
+    Restaurante restaurante;
 
     /**
      * Creates new form JifCadastrarProduto
@@ -25,6 +30,9 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         initComponents();
         this.setTitle("Cadastrar Produto");
         idRestauranteRecuperado = idRestaurante;
+        RestauranteService restauranteService = new RestauranteService();
+        restaurante = restauranteService.consultarRestaurantePorId(idRestauranteRecuperado);
+        System.out.println("idRestauranteRecuperado: " + restaurante.getId());
     }
 
     /**
@@ -195,13 +203,16 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
     private void buttonCadastrarProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonCadastrarProdutoMouseClicked
         // TODO add your handling code here:
         
+//        RestauranteService restauranteService = new RestauranteService();
+//        Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestauranteRecuperado);
+        
         String nome = textFieldNomeProduto.getText();
         String descricao = textFieldDescricaoProduto.getText();
         String categoria = textFieldCategoriaProduto.getText();
         String quantidade = textFieldQuantidadeProduto.getText();
         String valorUnitario = textFieldPrecoProduto.getText();
         
-        Produto produto = new Produto(nome, descricao, categoria, quantidade, valorUnitario, Long.toString(idRestauranteRecuperado));
+        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "imgUrl", restaurante);
         ProdutoService produtoService = new ProdutoService();
         int statusCode = produtoService.cadastrarProduto(produto);
         

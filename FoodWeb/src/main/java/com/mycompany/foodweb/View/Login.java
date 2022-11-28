@@ -196,8 +196,7 @@ public class Login extends javax.swing.JFrame {
             Restaurante restaurante = new Restaurante(email, senha);
             RestauranteService restauranteService = new RestauranteService();
             
-            Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);
-            System.out.println("restaurantelogado: " + restauranteLogado.getId());
+            Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);            
             if (restauranteLogado != null) {
                 this.setVisible(true);
                 Home frameHome = new Home();

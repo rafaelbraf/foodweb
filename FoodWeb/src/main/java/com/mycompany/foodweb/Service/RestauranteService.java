@@ -25,30 +25,24 @@ public class RestauranteService {
         
         Restaurante restauranteLogado = new Restaurante();
         
-        try {
-            
-            System.out.println("rest email: " + restaurante.getEmail());
-            System.out.println("rest email não é igual a '': " + !restaurante.getEmail().equals(""));
+        try {            
             
             if (restaurante.getEmail() != null && !restaurante.getEmail().equals("")) {
                 CloseableHttpClient httpClient = HttpClientBuilder.create().build();
                 
                 Gson gson = new Gson();
                 String restauranteJson = gson.toJson(restaurante);
-                System.out.println("restaurantejson: " + restauranteJson);
 
                 HttpPost request = new HttpPost("http://localhost:3001/login-restaurante");
                 request.setHeader("Content-Type", "application/json");
 
                 HttpEntity entity = new ByteArrayEntity(restauranteJson.getBytes("UTF-8"));
                 request.setEntity(entity);
-                System.out.println("entity: " + request.getEntity());
 
                 CloseableHttpResponse response = httpClient.execute(request);
                 StatusLine statusLine = response.getStatusLine();                
 
                 int statusCode = statusLine.getStatusCode();
-                System.out.println("status code: " + statusCode);
                 if (statusCode == 200) {
                     String responseString = new BasicResponseHandler().handleResponse(response);
                     System.out.println("responsestring: " + responseString);
@@ -62,6 +56,7 @@ public class RestauranteService {
                     restauranteLogado.setTelefone(jsonObject.getString("telefone"));
                     
                 } else {
+                    restauranteLogado = null;
                     JOptionPane.showMessageDialog(null, "Erro ao realizar login. Por favor, verifique seu email e senha e tente novamente.");
                 }
             }
@@ -71,6 +66,40 @@ public class RestauranteService {
         }
         
         return restauranteLogado;
+    }
+    
+    public Restaurante consultarRestaurantePorId(Long idRestaurante) {
+        
+        try {
+            
+            String url = "http://localhost:3001/restaurantes/" + idRestaurante;
+            
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                System.out.println("Erro " + conn.getResponseCode() + " ao tentar obter os dados da url: " + url);
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String output = "";
+            String line;
+            while ((line = br.readLine()) != null) {
+                output += line;
+            }
+            
+            conn.disconnect();
+            
+            Gson gson = new Gson();
+            Restaurante restaurante = gson.fromJson(output, Restaurante.class);
+            return restaurante;
+            
+        } catch (IOException exception) {
+            System.out.println("Erro: " + exception.getMessage());
+        }
+        
+        return null;
+        
     }
     
     public Produto[] listaProdutosDoRestaurante(Long idRestaurante) {

@@ -108,7 +108,7 @@ public class ProdutoService {
             Gson gson = new Gson();            
             String produtoJson = gson.toJson(produto);
             
-            HttpPost request = new HttpPost("http://localhost:3001/produto/");
+            HttpPost request = new HttpPost("http://localhost:3001/produtos");
             request.setHeader("Content-Type", "application/json");
             
             HttpEntity entity = new ByteArrayEntity(produtoJson.getBytes("UTF-8"));
