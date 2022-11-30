@@ -5,10 +5,15 @@
 package com.mycompany.foodweb.View.Produtos;
 
 import Util.GerenteDeJanelas;
+import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
+import com.mycompany.foodweb.Service.CategoriaService;
 import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,10 +34,21 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
     public JifCadastrarProduto(Long idRestaurante) {
         initComponents();
         this.setTitle("Cadastrar Produto");
-        idRestauranteRecuperado = idRestaurante;
         RestauranteService restauranteService = new RestauranteService();
-        restaurante = restauranteService.consultarRestaurantePorId(idRestauranteRecuperado);
-        System.out.println("idRestauranteRecuperado: " + restaurante.getId());
+        restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
+        carregaComboBoxCategorias(idRestaurante);
+    }
+    
+    private void carregaComboBoxCategorias(Long idRestaurante) {
+        
+        DefaultComboBoxModel comboBox = (DefaultComboBoxModel) comboBoxCategorias.getModel();
+        comboBox.removeAllElements();        
+        CategoriaService categoriaService = new CategoriaService();
+        Categoria[] listaDeCategorias = categoriaService.pegaCategoriasDoRestaurante(idRestaurante);
+        for (int i = 0; i < listaDeCategorias.length; i++) {
+            Categoria categoria = listaDeCategorias[i];
+            comboBox.addElement(categoria);
+        }
     }
 
     /**
@@ -208,11 +224,11 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         
         String nome = textFieldNomeProduto.getText();
         String descricao = textFieldDescricaoProduto.getText();
-        String categoria = textFieldCategoriaProduto.getText();
+        Categoria categoria = (Categoria) comboBoxCategorias.getSelectedItem();
         String quantidade = textFieldQuantidadeProduto.getText();
         String valorUnitario = textFieldPrecoProduto.getText();
         
-        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "imgUrl", restaurante);
+        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "imgUrl", restaurante, categoria);
         ProdutoService produtoService = new ProdutoService();
         int statusCode = produtoService.cadastrarProduto(produto);
         

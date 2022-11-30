@@ -65,7 +65,9 @@
                   <Component id="buttonPedidos" min="-2" pref="97" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="buttonCardapio" min="-2" pref="97" max="-2" attributes="0"/>
-                  <EmptySpace pref="417" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="buttonCategorias" min="-2" pref="97" max="-2" attributes="0"/>
+                  <EmptySpace pref="314" max="32767" attributes="0"/>
                   <Component id="buttonSair" min="-2" pref="97" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -77,9 +79,10 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="buttonPedidos" alignment="3" pref="106" max="32767" attributes="0"/>
-                      <Component id="buttonCardapio" alignment="3" pref="106" max="32767" attributes="0"/>
+                      <Component id="buttonCategorias" alignment="3" pref="106" max="32767" attributes="0"/>
                       <Component id="jButton3" alignment="3" pref="106" max="32767" attributes="0"/>
                       <Component id="buttonSair" alignment="3" pref="106" max="32767" attributes="0"/>
+                      <Component id="buttonCardapio" alignment="3" pref="106" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -101,12 +104,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPedidosActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="buttonCardapio">
+        <Component class="javax.swing.JButton" name="buttonCategorias">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Card&#xe1;pio"/>
+            <Property name="text" type="java.lang.String" value="Categorias"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCardapioActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCategoriasActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="buttonSair">
@@ -116,6 +119,14 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="buttonSairMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonSairActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="buttonCardapio">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Card&#xe1;pio"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCardapioActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

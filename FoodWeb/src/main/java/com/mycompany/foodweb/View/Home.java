@@ -9,6 +9,7 @@ import Util.GerenteDeJanelas;
 import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.View.Pedidos.JifPedidos;
+import com.mycompany.foodweb.View.Produtos.JifCategorias;
 
 import java.awt.Color;
 import javax.swing.*;
@@ -48,8 +49,9 @@ public class Home extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         buttonPedidos = new javax.swing.JButton();
-        buttonCardapio = new javax.swing.JButton();
+        buttonCategorias = new javax.swing.JButton();
         buttonSair = new javax.swing.JButton();
+        buttonCardapio = new javax.swing.JButton();
         jDesktopPane1 = new javax.swing.JDesktopPane();
 
         jMenuItem1.setText("jMenuItem1");
@@ -73,10 +75,10 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        buttonCardapio.setText("Cardápio");
-        buttonCardapio.addActionListener(new java.awt.event.ActionListener() {
+        buttonCategorias.setText("Categorias");
+        buttonCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonCardapioActionPerformed(evt);
+                buttonCategoriasActionPerformed(evt);
             }
         });
 
@@ -92,6 +94,13 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        buttonCardapio.setText("Cardápio");
+        buttonCardapio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCardapioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -103,7 +112,9 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(buttonPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonCardapio, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 417, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
                 .addComponent(buttonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -113,9 +124,10 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonPedidos, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                    .addComponent(buttonCardapio, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                    .addComponent(buttonCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                    .addComponent(buttonSair, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                    .addComponent(buttonSair, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                    .addComponent(buttonCardapio, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -154,11 +166,11 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonPedidosActionPerformed
 
-    private void buttonCardapioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCardapioActionPerformed
+    private void buttonCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCategoriasActionPerformed
         
-        gerenteDeJanelas.abrirJanelas(JifProdutos.getInstancia(idRestauranteRecuperado));
+        gerenteDeJanelas.abrirJanelas(JifCategorias.getInstancia(idRestauranteRecuperado));
         
-    }//GEN-LAST:event_buttonCardapioActionPerformed
+    }//GEN-LAST:event_buttonCategoriasActionPerformed
 
     private void buttonPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonPedidosMouseClicked
         
@@ -193,6 +205,12 @@ public class Home extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_buttonSairMouseClicked
+
+    private void buttonCardapioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCardapioActionPerformed
+        
+        gerenteDeJanelas.abrirJanelas(JifProdutos.getInstancia(idRestauranteRecuperado));
+        
+    }//GEN-LAST:event_buttonCardapioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,6 +267,7 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCardapio;
+    private javax.swing.JButton buttonCategorias;
     private javax.swing.JButton buttonPedidos;
     private javax.swing.JButton buttonSair;
     private javax.swing.JButton jButton3;
