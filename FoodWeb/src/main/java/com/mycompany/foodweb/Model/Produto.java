@@ -1,5 +1,8 @@
 package com.mycompany.foodweb.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Produto {
     
     int id;
@@ -8,18 +11,18 @@ public class Produto {
     Double preco;
     String imgUrl;    
     Restaurante restaurante;
-    Categoria categoria;
+    List<Categoria> categorias;
 
     public Produto() {
     }
-    
-    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante, Categoria categoria) {
+
+    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante, List<Categoria> categorias) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.imgUrl = imgUrl;
         this.restaurante = restaurante;
-        this.categoria = categoria;
+        this.categorias = categorias;
     }
 
     public int getId() {
@@ -70,12 +73,25 @@ public class Produto {
         this.restaurante = restaurante;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+//    public Categoria getCategoria() {
+//        return categoria;
+//    }
+//
+//    public void setCategoria(Categoria categoria) {
+//        this.categoria = categoria;
+//    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+    
+    @Override
+    public String toString() {
+        return categorias + ", ";
     }
     
 }

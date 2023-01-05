@@ -4,6 +4,7 @@
  */
 package com.mycompany.foodweb.View.Produtos;
 
+import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.View.Produtos.JifEditarProduto;
 import com.mycompany.foodweb.View.Produtos.JifCadastrarProduto;
 import com.mycompany.foodweb.Model.Produto;
@@ -11,6 +12,7 @@ import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -46,8 +48,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     public void preencherProdutosNaTabela(Long idRestaurante) {
         
         ProdutoService produtoService = new ProdutoService();
-        RestauranteService restauranteService = new RestauranteService();
-        //Produto[] listaProdutos = produtoService.listarTodosOsProdutos(idRestaurante);
+        RestauranteService restauranteService = new RestauranteService();        
         Produto[] listaProdutos = restauranteService.listaProdutosDoRestaurante(idRestaurante);
         DefaultTableModel tabela = (DefaultTableModel) tabelaProdutos.getModel();
         
@@ -58,12 +59,24 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         } else {
             
             for (var i = 0; i < listaProdutos.length; i++) {
+                
+                String categoriasString = "";
+                List<Categoria> listaCategorias = listaProdutos[i].getCategorias();
+                
+                for (var j = 0; j < listaCategorias.size(); j++) {
+                    Categoria categoria = listaCategorias.get(j);
+                    if (j != listaCategorias.size() - 1) {
+                        categoriasString += categoria.getNome() + ", ";
+                    } else {
+                        categoriasString += categoria.getNome();
+                    }
+                }
 
                 tabela.addRow(new Object[]{
                     listaProdutos[i].getId(),
                     listaProdutos[i].getNome(),
                     listaProdutos[i].getDescricao(),
-                    "",
+                    categoriasString,
                     listaProdutos[i].getPreco(),
                 });
 
@@ -139,6 +152,11 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         buttonEditarProduto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonEditarProdutoMouseClicked(evt);
+            }
+        });
+        buttonEditarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditarProdutoActionPerformed(evt);
             }
         });
 
@@ -321,6 +339,10 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         } 
         
     }//GEN-LAST:event_buttonVerProdutoMouseClicked
+
+    private void buttonEditarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarProdutoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonEditarProdutoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

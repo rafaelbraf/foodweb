@@ -40,7 +40,7 @@ public class JifVerProduto extends javax.swing.JInternalFrame {
             }
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar produto.");
+            JOptionPane.showMessageDialog(null, "Erro ao buscar1 produto.");
         }
         
     }

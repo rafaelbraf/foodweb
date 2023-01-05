@@ -13,6 +13,7 @@ import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -225,10 +226,12 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         String nome = textFieldNomeProduto.getText();
         String descricao = textFieldDescricaoProduto.getText();
         Categoria categoria = (Categoria) comboBoxCategorias.getSelectedItem();
+        List<Categoria> categorias = new ArrayList<>();
+        categorias.add(categoria);
         String quantidade = textFieldQuantidadeProduto.getText();
         String valorUnitario = textFieldPrecoProduto.getText();
         
-        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "imgUrl", restaurante, categoria);
+        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "img", restaurante, categorias);
         ProdutoService produtoService = new ProdutoService();
         int statusCode = produtoService.cadastrarProduto(produto);
         

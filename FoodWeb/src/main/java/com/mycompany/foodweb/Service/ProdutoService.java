@@ -26,7 +26,7 @@ public class ProdutoService {
         
         try {
             
-            String url = "http://localhost:3001/produto/" + idProduto;
+            String url = "http://localhost:3001/produtos/" + idProduto;
             
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
@@ -35,20 +35,21 @@ public class ProdutoService {
                 System.out.println("Erro ao consultar produto.");
             }
             
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));            
             String output = "";
             String line;
             while ((line = br.readLine()) != null) {
                 output += line;
             }
             
+            System.out.println("Produto output: " + output);
+            
             conn.disconnect();
             
             Gson gson = new Gson();            
-            Produto[] produto = gson.fromJson(output, Produto[].class);            
+            Produto produto = gson.fromJson(output, Produto.class);            
             
-            return produto[0];
+            return produto;
             
         } catch(IOException exception) {
             System.out.println("Erro ao consultar produto " + exception.getMessage());

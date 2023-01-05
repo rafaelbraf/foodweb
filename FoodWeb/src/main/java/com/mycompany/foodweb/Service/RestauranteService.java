@@ -7,6 +7,7 @@ import com.mycompany.foodweb.Model.Restaurante;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.swing.JOptionPane;
@@ -18,11 +19,11 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.primefaces.shaded.json.JSONObject;
+import org.json.JSONObject;
 
 public class RestauranteService {
     
-    public Restaurante fazerLoginComEmailESenha(Restaurante restaurante) {
+    public Restaurante fazerLoginComEmailESenha(Restaurante restaurante) throws UnsupportedEncodingException, IOException {
         
         Restaurante restauranteLogado = new Restaurante();
         

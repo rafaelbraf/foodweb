@@ -4,9 +4,14 @@
  */
 package com.mycompany.foodweb.View.Produtos;
 
+import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.Model.Produto;
+import com.mycompany.foodweb.Model.Restaurante;
 import com.mycompany.foodweb.Service.ProdutoService;
+import com.mycompany.foodweb.Service.RestauranteService;
+
 import javax.swing.JOptionPane;
+import java.util.List;
 
 /**
  *
@@ -16,7 +21,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
     
     int idAtualProduto;
     String nomeAtualProduto;
-    String categoriaAtualProduto;
+    List<Categoria> listaCategorias;
     String descricaoAtualProduto;
     String precoAtualProduto;
     String quantidadeAtualProduto;
@@ -31,27 +36,23 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             
             ProdutoService produtoService = new ProdutoService();
             Produto produto = produtoService.pegaProdutoPorId(idProduto);
+
+            RestauranteService restauranteService = new RestauranteService();
+            Restaurante restaurante = restauranteService.consultarRestaurantePorId(produto.getRestaurante().getId());
             
-            if (produto != null) {
-                
-                idAtualProduto = produto.getIdProduto();
-                nomeAtualProduto = produto.getNome();
-                categoriaAtualProduto = produto.getCategoria();
-                descricaoAtualProduto = produto.getDescricao();
-                precoAtualProduto = produto.getValorUnitario();
-                quantidadeAtualProduto = produto.getQuantidade();
-                
-                textFieldCodigoProduto.setText(Integer.toString(idAtualProduto));
-                textFieldNomeProduto.setText(nomeAtualProduto);
-                textFieldCategoriaProduto.setText(categoriaAtualProduto);
-                textAreaDescricaoProduto.setText(descricaoAtualProduto);
-                textFieldPrecoProduto.setText(precoAtualProduto);
-                textFieldQuantidadeProduto.setText(quantidadeAtualProduto);
-                
-            }
+            idAtualProduto = produto.getId();
+            nomeAtualProduto = produto.getNome();
+            listaCategorias = produto.getCategorias();
+            descricaoAtualProduto = produto.getDescricao();
+
+            textFieldCodigoProduto.setText(Integer.toString(produto.getId()));
+            textFieldNomeProduto.setText(produto.getNome());
+            textFieldCategoriaProduto.setText(produto.getCategorias().toString());
+            textAreaDescricaoProduto.setText(produto.getDescricao());
+            textFieldPrecoProduto.setText(Double.toString(produto.getPreco()));            
             
         } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar produto.");
+            JOptionPane.showMessageDialog(null, "Erro ao carregar as informações do produto.");
         }
         
     }
@@ -259,13 +260,13 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
         String novaQuantidadeProduto = textFieldQuantidadeProduto.getText();
         
         if (novoNomeProduto != nomeAtualProduto 
-            || novaCategoriaProduto != categoriaAtualProduto 
-            || novaDescricaoProduto != categoriaAtualProduto
+            || novaCategoriaProduto != categoriaAtualProduto.getNome()
+            || novaDescricaoProduto != categoriaAtualProduto.getNome()
             || novoPrecoProduto != precoAtualProduto
             || novaQuantidadeProduto != quantidadeAtualProduto
         ) {
             
-            Produto produto = new Produto(novoIdProduto, novoNomeProduto, novaDescricaoProduto, novaCategoriaProduto, novaQuantidadeProduto, novoPrecoProduto);
+            Produto produto = new Produto(novoNomeProduto, novaDescricaoProduto, Double.parseDouble(novoPrecoProduto), "url", novaQuantidadeProduto, novaCategoriaProduto);
             ProdutoService produtoService = new ProdutoService();
             int statusCodeRetorno = produtoService.atualizaProdutoPorId(produto);
             

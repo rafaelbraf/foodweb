@@ -196,12 +196,19 @@ public class Login extends javax.swing.JFrame {
             Restaurante restaurante = new Restaurante(email, senha);
             RestauranteService restauranteService = new RestauranteService();
             
-            Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);            
-            if (restauranteLogado != null) {
-                this.setVisible(true);
-                Home frameHome = new Home();
-                frameHome.setVisible(true);
-                frameHome.pegaIdRestaurante(restauranteLogado.getId());
+            try {
+                
+                Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);
+                
+                if (restauranteLogado != null) {
+                    this.setVisible(true);
+                    Home frameHome = new Home();
+                    frameHome.setVisible(true);
+                    frameHome.pegaIdRestaurante(restauranteLogado.getId());
+                }
+                
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fazer login.");
             }
             
         }
