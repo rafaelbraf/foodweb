@@ -181,6 +181,11 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
                 buttonCadastrarProdutoMouseClicked(evt);
             }
         });
+        buttonCadastrarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCadastrarProdutoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -218,11 +223,11 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastrarProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonCadastrarProdutoMouseClicked
+                
+    }//GEN-LAST:event_buttonCadastrarProdutoMouseClicked
+
+    private void buttonCadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarProdutoActionPerformed
         // TODO add your handling code here:
-        
-//        RestauranteService restauranteService = new RestauranteService();
-//        Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestauranteRecuperado);
-        
         String nome = textFieldNomeProduto.getText();
         String descricao = textFieldDescricaoProduto.getText();
         Categoria categoria = (Categoria) comboBoxCategorias.getSelectedItem();
@@ -231,7 +236,7 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         String quantidade = textFieldQuantidadeProduto.getText();
         String valorUnitario = textFieldPrecoProduto.getText();
         
-        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), "img", restaurante, categorias);
+        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), Double.valueOf(quantidade), "img", restaurante, categorias);        
         ProdutoService produtoService = new ProdutoService();
         int statusCode = produtoService.cadastrarProduto(produto);
         
@@ -241,8 +246,7 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto.");
         }
-        
-    }//GEN-LAST:event_buttonCadastrarProdutoMouseClicked
+    }//GEN-LAST:event_buttonCadastrarProdutoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
