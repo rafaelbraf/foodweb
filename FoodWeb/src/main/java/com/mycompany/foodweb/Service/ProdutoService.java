@@ -165,7 +165,7 @@ public class ProdutoService {
         
         try {
             
-            String url = "http://localhost:3001/produto/" + idProduto;
+            String url = "http://localhost:3001/produtos/" + idProduto;
             
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("DELETE");
