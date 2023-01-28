@@ -9,6 +9,7 @@ public class Produto {
     String nome;
     String descricao;
     Double preco;
+    Double quantidade;
     String imgUrl;    
     Restaurante restaurante;
     List<Categoria> categorias;
@@ -16,10 +17,11 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(String nome, String descricao, Double preco, String imgUrl, Restaurante restaurante, List<Categoria> categorias) {
+    public Produto(String nome, String descricao, Double preco, Double quantidade, String imgUrl, Restaurante restaurante, List<Categoria> categorias) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
+        this.quantidade = quantidade;
         this.imgUrl = imgUrl;
         this.restaurante = restaurante;
         this.categorias = categorias;
@@ -57,6 +59,14 @@ public class Produto {
         this.preco = preco;
     }
 
+    public Double getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Double quantidade) {
+        this.quantidade = quantidade;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }
@@ -72,14 +82,6 @@ public class Produto {
     public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
     }
-
-//    public Categoria getCategoria() {
-//        return categoria;
-//    }
-//
-//    public void setCategoria(Categoria categoria) {
-//        this.categoria = categoria;
-//    }
 
     public List<Categoria> getCategorias() {
         return categorias;
