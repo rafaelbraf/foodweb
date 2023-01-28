@@ -78,6 +78,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
                     listaProdutos[i].getDescricao(),
                     categoriasString,
                     listaProdutos[i].getPreco(),
+                    listaProdutos[i].getQuantidade()
                 });
 
             }
@@ -292,6 +293,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
                 try {
                     ProdutoService produtoService = new ProdutoService();
                     produtoService.excluirProduto(codigoProduto);
+                    JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!");
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Erro ao excluir produto");
                 }
