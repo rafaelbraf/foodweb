@@ -26,6 +26,8 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
     String precoAtualProduto;
     String quantidadeAtualProduto;
     
+    Long idRestaurante;
+    
     public JifEditarProduto() {
         initComponents();
     }
@@ -36,20 +38,24 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             
             ProdutoService produtoService = new ProdutoService();
             Produto produto = produtoService.pegaProdutoPorId(idProduto);
+            
+            idRestaurante = produto.getRestaurante().getId();
 
             RestauranteService restauranteService = new RestauranteService();
-            Restaurante restaurante = restauranteService.consultarRestaurantePorId(produto.getRestaurante().getId());
+            Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
             
             idAtualProduto = produto.getId();
             nomeAtualProduto = produto.getNome();
             listaCategorias = produto.getCategorias();
             descricaoAtualProduto = produto.getDescricao();
+            quantidadeAtualProduto = produto.getQuantidade().toString();
 
             textFieldCodigoProduto.setText(Integer.toString(produto.getId()));
             textFieldNomeProduto.setText(produto.getNome());
             textFieldCategoriaProduto.setText(produto.getCategorias().toString());
             textAreaDescricaoProduto.setText(produto.getDescricao());
-            textFieldPrecoProduto.setText(Double.toString(produto.getPreco()));            
+            textFieldPrecoProduto.setText(Double.toString(produto.getPreco())); 
+            textFieldQuantidadeProduto.setText(quantidadeAtualProduto);
             
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao carregar as informações do produto.");
@@ -208,6 +214,11 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                 buttonEditarProdutoMouseClicked(evt);
             }
         });
+        buttonEditarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditarProdutoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -259,16 +270,21 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
         String novoPrecoProduto = textFieldPrecoProduto.getText();
         String novaQuantidadeProduto = textFieldQuantidadeProduto.getText();
         
-        if (novoNomeProduto != nomeAtualProduto 
-            || novaCategoriaProduto != categoriaAtualProduto.getNome()
-            || novaDescricaoProduto != categoriaAtualProduto.getNome()
+        if (novoNomeProduto != nomeAtualProduto
             || novoPrecoProduto != precoAtualProduto
-            || novaQuantidadeProduto != quantidadeAtualProduto
-        ) {
+            || novaQuantidadeProduto != quantidadeAtualProduto) {
             
-            Produto produto = new Produto(novoNomeProduto, novaDescricaoProduto, Double.parseDouble(novoPrecoProduto), "url", novaQuantidadeProduto, novaCategoriaProduto);
+            RestauranteService restauranteService = new RestauranteService();
+            Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
+            
             ProdutoService produtoService = new ProdutoService();
-            int statusCodeRetorno = produtoService.atualizaProdutoPorId(produto);
+            Produto produto = produtoService.pegaProdutoPorId(novoIdProduto);
+            
+            List<Categoria> categorias = produto.getCategorias();
+            
+            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
+            
+            int statusCodeRetorno = produtoService.atualizaProdutoPorId(novoIdProduto, produtoAlterado);
             
             if (statusCodeRetorno != 200) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
@@ -280,6 +296,43 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_buttonEditarProdutoMouseClicked
+
+    private void buttonEditarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarProdutoActionPerformed
+        // TODO add your handling code here:
+        
+        int novoIdProduto = Integer.parseInt(textFieldCodigoProduto.getText());
+        String novoNomeProduto = textFieldNomeProduto.getText();
+        String novaCategoriaProduto = textFieldCategoriaProduto.getText();
+        String novaDescricaoProduto = textAreaDescricaoProduto.getText();
+        String novoPrecoProduto = textFieldPrecoProduto.getText();
+        String novaQuantidadeProduto = textFieldQuantidadeProduto.getText();
+        
+        if (novoNomeProduto != nomeAtualProduto
+            || novoPrecoProduto != precoAtualProduto
+            || novaQuantidadeProduto != quantidadeAtualProduto) {
+            
+            RestauranteService restauranteService = new RestauranteService();
+            Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
+            
+            ProdutoService produtoService = new ProdutoService();
+            Produto produto = produtoService.pegaProdutoPorId(novoIdProduto);
+            
+            List<Categoria> categorias = produto.getCategorias();
+            
+            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
+            
+            int statusCodeRetorno = produtoService.atualizaProdutoPorId(idAtualProduto, produtoAlterado);
+            
+            if (statusCodeRetorno != 200) {
+                JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto editado com sucesso!");
+                this.dispose();
+            }
+            
+        }
+        
+    }//GEN-LAST:event_buttonEditarProdutoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
