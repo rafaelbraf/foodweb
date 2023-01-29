@@ -223,29 +223,34 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastrarProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonCadastrarProdutoMouseClicked
-                
+         
     }//GEN-LAST:event_buttonCadastrarProdutoMouseClicked
 
     private void buttonCadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarProdutoActionPerformed
         // TODO add your handling code here:
-        String nome = textFieldNomeProduto.getText();
-        String descricao = textFieldDescricaoProduto.getText();
         Categoria categoria = (Categoria) comboBoxCategorias.getSelectedItem();
-        List<Categoria> categorias = new ArrayList<>();
-        categorias.add(categoria);
-        String quantidade = textFieldQuantidadeProduto.getText();
-        String valorUnitario = textFieldPrecoProduto.getText();
-        
-        Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), Double.valueOf(quantidade), "img", restaurante, categorias);        
-        ProdutoService produtoService = new ProdutoService();
-        int statusCode = produtoService.cadastrarProduto(produto);
-        
-        if (statusCode == 201) {
-            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
-            this.dispose();
+        if (categoria != null) {
+            String nome = textFieldNomeProduto.getText();
+            String descricao = textFieldDescricaoProduto.getText().trim();
+
+            List<Categoria> categorias = new ArrayList<>();
+            categorias.add(categoria);
+            String quantidade = textFieldQuantidadeProduto.getText();
+            String valorUnitario = textFieldPrecoProduto.getText();
+            
+            Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), Double.valueOf(quantidade), "img", restaurante, categorias);        
+            ProdutoService produtoService = new ProdutoService();
+            int statusCode = produtoService.cadastrarProduto(produto);
+
+            if (statusCode == 201) {
+                JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto.");
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto.");
-        }
+            JOptionPane.showMessageDialog(null, "Para cadastrar o produto é necessário selecionar uma categoria.");
+        }        
     }//GEN-LAST:event_buttonCadastrarProdutoActionPerformed
 
 
