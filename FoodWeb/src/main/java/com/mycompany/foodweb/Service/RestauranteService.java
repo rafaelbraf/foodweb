@@ -23,9 +23,7 @@ import org.json.JSONObject;
 
 public class RestauranteService {
     
-    public Restaurante fazerLoginComEmailESenha(Restaurante restaurante) throws UnsupportedEncodingException, IOException {
-        
-        Restaurante restauranteLogado = new Restaurante();
+    public Restaurante fazerLoginComEmailESenha(Restaurante restaurante) {
         
         try {            
             
@@ -44,12 +42,13 @@ public class RestauranteService {
                 CloseableHttpResponse response = httpClient.execute(request);
                 StatusLine statusLine = response.getStatusLine();                
 
-                int statusCode = statusLine.getStatusCode();
-                if (statusCode == 200) {
+                Boolean restauranteLogadoComSucesso = statusLine.getStatusCode() == 200;
+                if (restauranteLogadoComSucesso) {
                     String responseString = new BasicResponseHandler().handleResponse(response);
                     System.out.println("responsestring: " + responseString);
                     JSONObject jsonObject = new JSONObject(responseString);
                     
+                    Restaurante restauranteLogado = new Restaurante();                    
                     restauranteLogado.setId(jsonObject.getLong("id"));
                     restauranteLogado.setNome(jsonObject.getString("nome"));
                     restauranteLogado.setEmail(jsonObject.getString("email"));
@@ -57,17 +56,18 @@ public class RestauranteService {
                     restauranteLogado.setCpfCnpj(jsonObject.getString("cpfCnpj"));
                     restauranteLogado.setTelefone(jsonObject.getString("telefone"));
                     
-                } else {
-                    restauranteLogado = null;
+                    return restauranteLogado;
+                    
+                } else {                    
                     JOptionPane.showMessageDialog(null, "Erro ao realizar login. Por favor, verifique seu email e senha e tente novamente.");
                 }
             }
             
         } catch(IOException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao realizar login. Entre em contato com nosso suporte.");
+            JOptionPane.showMessageDialog(null, "Erro: " + e.getLocalizedMessage() + ". Caso o problema persista entre em contato com nosso suporte.");
         }
         
-        return restauranteLogado;
+        return null;
     }
     
     public Restaurante consultarRestaurantePorId(Long idRestaurante) {
