@@ -284,9 +284,9 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             
             Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
             
-            int statusCodeRetorno = produtoService.atualizaProdutoPorId(novoIdProduto, produtoAlterado);
+            Boolean produtoAtualizado = produtoService.atualizaProdutoPorId(novoIdProduto, produtoAlterado);
             
-            if (statusCodeRetorno != 200) {
+            if (produtoAtualizado) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Produto editado com sucesso!");
@@ -321,9 +321,9 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             
             Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
             
-            int statusCodeRetorno = produtoService.atualizaProdutoPorId(idAtualProduto, produtoAlterado);
+            Boolean produtoAtualizado = produtoService.atualizaProdutoPorId(idAtualProduto, produtoAlterado);
             
-            if (statusCodeRetorno != 200) {
+            if (produtoAtualizado) {
                 JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Produto editado com sucesso!");

@@ -238,11 +238,12 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
             String quantidade = textFieldQuantidadeProduto.getText();
             String valorUnitario = textFieldPrecoProduto.getText();
             
-            Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), Double.valueOf(quantidade), "img", restaurante, categorias);        
+            Produto produto = new Produto(nome, descricao, Double.valueOf(valorUnitario), Double.valueOf(quantidade), "img", restaurante, categorias);  
+            
             ProdutoService produtoService = new ProdutoService();
-            int statusCode = produtoService.cadastrarProduto(produto);
+            Boolean produtoCadastrado = produtoService.cadastrarProduto(produto);
 
-            if (statusCode == 201) {
+            if (produtoCadastrado) {
                 JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
                 this.dispose();
             } else {

@@ -42,8 +42,6 @@ public class ProdutoService {
                 output += line;
             }
             
-            System.out.println("Produto output: " + output);
-            
             conn.disconnect();
             
             Gson gson = new Gson();            
@@ -82,11 +80,9 @@ public class ProdutoService {
                 output += line;
             }
             
-            System.out.println(output);
-            
             conn.disconnect();
+            
             Gson gson = new Gson();
-            //Produto produto = gson.fromJson( new String(output.getBytes()) , Produto.class);
             Produto[] arrayProdutos = gson.fromJson(output, Produto[].class);
             
             return arrayProdutos;
@@ -94,15 +90,14 @@ public class ProdutoService {
         } catch(IOException exception) {
             System.out.println("deu erro óh " + exception.getMessage() );
         }
+        
         return null;
         
     }
     
-    public int cadastrarProduto(Produto produto) {
+    public Boolean cadastrarProduto(Produto produto) {
         
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        int statusCode = 0;
         
         try {
             
@@ -117,7 +112,9 @@ public class ProdutoService {
             
             CloseableHttpResponse response = httpClient.execute(request);
             StatusLine statusLine = response.getStatusLine();
-            statusCode = statusLine.getStatusCode();
+            
+            Boolean produtoCadastrado = statusLine.getStatusCode() == 201;
+            return produtoCadastrado;
             
         } catch(IOException e) {
             System.out.println("Deu erro ao tentar inserir novo produto: " + e.getMessage());
@@ -129,14 +126,13 @@ public class ProdutoService {
             }
         }
         
-        return statusCode;
+        return null;
         
     }
     
-    public int atualizaProdutoPorId(int idProduto, Produto produto) {
+    public Boolean atualizaProdutoPorId(int idProduto, Produto produto) {
         
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        int statusCode = 0;
         
         try {
             
@@ -151,14 +147,15 @@ public class ProdutoService {
             
             CloseableHttpResponse response = httpClient.execute(request);
             StatusLine statusLine = response.getStatusLine();
-            statusCode = statusLine.getStatusCode();
-            return statusCode;
+            
+            Boolean produtoAtualizado = statusLine.getStatusCode() == 200;
+            return produtoAtualizado;
             
         } catch (IOException e) {
             System.out.println("Erro ao editar produto.");
         }
         
-        return statusCode;
+        return null;
     }
     
     public void excluirProduto(int idProduto) {
@@ -182,8 +179,6 @@ public class ProdutoService {
             while((line = br.readLine()) != null) {
                 output += line;
             }
-            
-            System.out.println(output);
             
             conn.disconnect();
             
