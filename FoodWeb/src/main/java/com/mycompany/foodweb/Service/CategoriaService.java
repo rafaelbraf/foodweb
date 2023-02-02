@@ -40,8 +40,6 @@ public class CategoriaService {
                 output += line;
             }
             
-            System.out.println(output);
-            
             conn.disconnect();
             
             Gson gson = new Gson();
@@ -56,11 +54,9 @@ public class CategoriaService {
         
     }
     
-    public int adicionarNovaCategoria(Categoria categoria) {
+    public Boolean adicionarNovaCategoria(Categoria categoria) {
         
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        
-        int statusCode = 0;
         
         try {
             
@@ -75,19 +71,21 @@ public class CategoriaService {
             
             CloseableHttpResponse response = httpClient.execute(request);
             StatusLine statusLine = response.getStatusLine();
-            statusCode = statusLine.getStatusCode();
+            
+            Boolean categoriaAdicionada = statusLine.getStatusCode() == 201;
+            return categoriaAdicionada;
             
         } catch (IOException e) {
             System.out.println("Erro ao tentar cadastrar nova categoria: " + e.getMessage());
         } finally {
             try {
-                httpClient.close();                
+                httpClient.close();
             } catch (IOException ex) {
                 Logger.getLogger(CategoriaService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
-        return statusCode;
+        return false;
         
     }
     
