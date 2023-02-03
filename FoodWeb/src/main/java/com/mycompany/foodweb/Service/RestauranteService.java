@@ -7,7 +7,6 @@ import com.mycompany.foodweb.Model.Restaurante;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.swing.JOptionPane;
@@ -123,7 +122,6 @@ public class RestauranteService {
             while((line = br.readLine()) != null) {
                 output += line;
             }
-            System.out.println("Output: " + output);
             
             conn.disconnect();
             
@@ -133,6 +131,43 @@ public class RestauranteService {
             
         } catch(IOException exception) {
             System.out.println("Erro: " + exception.getMessage());
+        }
+        
+        return null;
+        
+    }
+    
+    public Produto[] listaProdutosDoRestaurantePorNome(Long idRestaurante, String nome) {
+        
+        try {
+            
+            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos/query=" + nome;
+            
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            
+            if (conn.getResponseCode() != 200) {
+                System.out.println("Erro " + conn.getResponseCode() + " ao consultar Produtos");
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            
+            String output = "";
+            String line;
+            while((line = br.readLine()) != null) {
+                output += line;
+            }
+            
+            conn.disconnect();
+            
+            Gson gson = new Gson();
+            Produto[] listaProdutos = gson.fromJson(output, Produto[].class);
+            
+            return listaProdutos;
+            
+        } catch (IOException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
         
         return null;

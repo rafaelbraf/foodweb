@@ -47,7 +47,6 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     
     public void preencherProdutosNaTabela(Long idRestaurante) {
         
-        ProdutoService produtoService = new ProdutoService();
         RestauranteService restauranteService = new RestauranteService();        
         Produto[] listaProdutos = restauranteService.listaProdutosDoRestaurante(idRestaurante);
         DefaultTableModel tabela = (DefaultTableModel) tabelaProdutos.getModel();
@@ -86,6 +85,47 @@ public class JifProdutos extends javax.swing.JInternalFrame {
             labelTotalDeItens.setText("Total de itens: " + listaProdutos.length);
             
         }
+        
+    }
+    
+    public void pesquisaProdutosPorNome(Long idRestaurante, String nome) {
+        
+        RestauranteService restauranteService = new RestauranteService();
+        nome = nome.toLowerCase();
+        Produto[] listaDeProdutos = restauranteService.listaProdutosDoRestaurantePorNome(idRestaurante, nome);
+        DefaultTableModel tabela = (DefaultTableModel) tabelaProdutos.getModel();
+        
+        tabela.setRowCount(0);
+        
+        if (listaDeProdutos != null) {
+            
+            for (var i = 0; i < listaDeProdutos.length; i++) {
+            
+                String categoriasString = "";
+                List<Categoria> listaDeCategorias = listaDeProdutos[i].getCategorias();
+
+                for (var j = 0; j < listaDeCategorias.size(); j++) {
+                    Categoria categoria = listaDeCategorias.get(j);
+                    if (j != listaDeCategorias.size() - 1) {
+                        categoriasString += categoria.getNome() + ", ";
+                    } else {
+                        categoriasString += categoria.getNome();
+                    }
+                }
+
+                tabela.addRow(new Object[] {
+                    listaDeProdutos[i].getId(),
+                    listaDeProdutos[i].getNome(),
+                    listaDeProdutos[i].getDescricao(),
+                    categoriasString,
+                    listaDeProdutos[i].getPreco(),
+                    listaDeProdutos[i].getQuantidade()
+                });
+
+                labelTotalDeItens.setText("Total de itens: " + tabela.getRowCount());
+
+            }
+        }        
         
     }
 
@@ -170,6 +210,11 @@ public class JifProdutos extends javax.swing.JInternalFrame {
                 buttonAtualizarTabelaDeProdutosMouseClicked(evt);
             }
         });
+        buttonAtualizarTabelaDeProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAtualizarTabelaDeProdutosActionPerformed(evt);
+            }
+        });
 
         buttonVerProduto.setText("Ver");
         buttonVerProduto.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -225,6 +270,11 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         jLabel1.setText("Pesquisar produtos");
 
         buttonPesquisarProdutos.setIcon(new javax.swing.ImageIcon("D:\\Projetos\\FoodWeb-Projeto\\Desktop\\FoodWeb\\assets\\search-icon.png")); // NOI18N
+        buttonPesquisarProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPesquisarProdutosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -287,6 +337,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_buttonAdicionarProdutoMouseClicked
 
     private void buttonAtualizarTabelaDeProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonAtualizarTabelaDeProdutosMouseClicked
+        tfPesquisarProduto.setText("");
         preencherProdutosNaTabela(idRestauranteRecuperado);
     }//GEN-LAST:event_buttonAtualizarTabelaDeProdutosMouseClicked
 
@@ -370,6 +421,15 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     private void buttonEditarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarProdutoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonEditarProdutoActionPerformed
+
+    private void buttonPesquisarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPesquisarProdutosActionPerformed
+        String nomeDoProduto = tfPesquisarProduto.getText();
+        pesquisaProdutosPorNome(idRestauranteRecuperado, nomeDoProduto);
+    }//GEN-LAST:event_buttonPesquisarProdutosActionPerformed
+
+    private void buttonAtualizarTabelaDeProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAtualizarTabelaDeProdutosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonAtualizarTabelaDeProdutosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

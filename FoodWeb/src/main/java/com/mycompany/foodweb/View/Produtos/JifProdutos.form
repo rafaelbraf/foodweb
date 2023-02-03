@@ -207,6 +207,7 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="buttonAtualizarTabelaDeProdutosMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAtualizarTabelaDeProdutosActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="buttonVerProduto">
@@ -250,6 +251,9 @@
           <Image iconType="2" name="D:\Projetos\FoodWeb-Projeto\Desktop\FoodWeb\assets\search-icon.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPesquisarProdutosActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
