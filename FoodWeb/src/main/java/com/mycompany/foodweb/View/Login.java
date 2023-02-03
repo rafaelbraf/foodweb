@@ -4,32 +4,8 @@
  */
 package com.mycompany.foodweb.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.mycompany.foodweb.Model.Restaurante;
-import com.mycompany.foodweb.Model.Usuario;
 import com.mycompany.foodweb.Service.RestauranteService;
-import com.mycompany.foodweb.Service.UsuarioService;
-import java.io.IOException;
-import javax.swing.JOptionPane;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-import org.primefaces.shaded.json.JSONArray;
-import org.primefaces.shaded.json.JSONObject;
 
 /**
  *
@@ -196,19 +172,12 @@ public class Login extends javax.swing.JFrame {
             Restaurante restaurante = new Restaurante(email, senha);
             RestauranteService restauranteService = new RestauranteService();
             
-            try {
-                
-                Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);
-                
-                if (restauranteLogado != null) {
-                    this.setVisible(true);
-                    Home frameHome = new Home();
-                    frameHome.setVisible(true);
-                    frameHome.pegaIdRestaurante(restauranteLogado.getId());
-                }
-                
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fazer login.");
+            Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);
+            if (restauranteLogado != null) {
+                this.setVisible(false);
+                Home frameHome = new Home();
+                frameHome.setVisible(true);
+                frameHome.pegaIdRestaurante(restauranteLogado.getId());
             }
             
         }
