@@ -32,7 +32,7 @@ public class JifVerProduto extends javax.swing.JInternalFrame {
                 
                 textFieldCodigoProduto.setText(Integer.toString(produto.getId()));
                 textFieldNomeProduto.setText(produto.getNome());
-                textFieldCategoriaProduto.setText(produto.getCategorias().toString());
+                textFieldCategoriaProduto.setText(produto.categoriasToString());
                 textAreaDescricaoProduto.setText(produto.getDescricao());
                 textFieldPrecoProduto.setText(produto.getPreco().toString());
                 textFieldQuantidadeProduto.setText(produto.getQuantidade().toString());

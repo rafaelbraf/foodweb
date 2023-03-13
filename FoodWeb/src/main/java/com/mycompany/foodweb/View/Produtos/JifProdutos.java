@@ -5,8 +5,6 @@
 package com.mycompany.foodweb.View.Produtos;
 
 import com.mycompany.foodweb.Model.Categoria;
-import com.mycompany.foodweb.View.Produtos.JifEditarProduto;
-import com.mycompany.foodweb.View.Produtos.JifCadastrarProduto;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
@@ -16,7 +14,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class JifProdutos extends javax.swing.JInternalFrame {
+public final class JifProdutos extends javax.swing.JInternalFrame {
     
     private static JifProdutos internalFrameProdutos;
     private static Long idRestauranteRecuperado;
@@ -40,6 +38,8 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         tabelaProdutos.getTableHeader().setForeground(Color.WHITE);
         tabelaProdutos.setRowHeight(25);
         tabelaProdutos.setShowVerticalLines(false);
+        
+        buttonLimparPesquisa.setVisible(false);
         
         preencherProdutosNaTabela(idRestaurante);
         
@@ -151,6 +151,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         tfPesquisarProduto = new javax.swing.JTextField();
         buttonPesquisarProdutos = new javax.swing.JButton();
+        buttonLimparPesquisa = new javax.swing.JButton();
 
         setBorder(null);
         setClosable(true);
@@ -269,10 +270,17 @@ public class JifProdutos extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Pesquisar produtos");
 
-        buttonPesquisarProdutos.setIcon(new javax.swing.ImageIcon("D:\\Projetos\\FoodWeb-Projeto\\Desktop\\FoodWeb\\assets\\search-icon.png")); // NOI18N
+        buttonPesquisarProdutos.setIcon(new javax.swing.ImageIcon("D:\\Projetos\\FoodWeb\\Desktop\\FoodWeb\\assets\\search-icon.png")); // NOI18N
         buttonPesquisarProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonPesquisarProdutosActionPerformed(evt);
+            }
+        });
+
+        buttonLimparPesquisa.setText("Limpar pesquisa");
+        buttonLimparPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonLimparPesquisaActionPerformed(evt);
             }
         });
 
@@ -294,11 +302,15 @@ public class JifProdutos extends javax.swing.JInternalFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfPesquisarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buttonPesquisarProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(tfPesquisarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(buttonPesquisarProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(buttonLimparPesquisa)
+                                .addGap(143, 143, 143)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -312,7 +324,9 @@ public class JifProdutos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(buttonPesquisarProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfPesquisarProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))))
+                            .addComponent(tfPesquisarProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonLimparPesquisa)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
@@ -382,12 +396,11 @@ public class JifProdutos extends javax.swing.JInternalFrame {
 
     private void buttonEditarProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonEditarProdutoMouseClicked
         int linhaSelecionada = tabelaProdutos.getSelectedRow();
-        int codigoProduto = 0;
         
         if (linhaSelecionada != -1) {
-            codigoProduto = Integer.parseInt(tabelaProdutos.getValueAt(linhaSelecionada, 0).toString());
+            int codigoProduto = Integer.parseInt(tabelaProdutos.getValueAt(linhaSelecionada, 0).toString());
             if (codigoProduto != 0) {
-                JifEditarProduto internalFrameEditarProduto = new JifEditarProduto();
+                JifEditarProduto internalFrameEditarProduto = new JifEditarProduto(idRestauranteRecuperado);
                 getParent().add(internalFrameEditarProduto);
                 internalFrameEditarProduto.setVisible(true);
                 internalFrameEditarProduto.setClosable(true);
@@ -423,6 +436,7 @@ public class JifProdutos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_buttonEditarProdutoActionPerformed
 
     private void buttonPesquisarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPesquisarProdutosActionPerformed
+        buttonLimparPesquisa.setVisible(true);
         String nomeDoProduto = tfPesquisarProduto.getText();
         pesquisaProdutosPorNome(idRestauranteRecuperado, nomeDoProduto);
     }//GEN-LAST:event_buttonPesquisarProdutosActionPerformed
@@ -431,12 +445,19 @@ public class JifProdutos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonAtualizarTabelaDeProdutosActionPerformed
 
+    private void buttonLimparPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLimparPesquisaActionPerformed
+        tfPesquisarProduto.setText("");
+        buttonLimparPesquisa.setVisible(false);
+        preencherProdutosNaTabela(idRestauranteRecuperado);
+    }//GEN-LAST:event_buttonLimparPesquisaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAdicionarProduto;
     private javax.swing.JButton buttonAtualizarTabelaDeProdutos;
     private javax.swing.JButton buttonEditarProduto;
     private javax.swing.JButton buttonExcluirProduto;
+    private javax.swing.JButton buttonLimparPesquisa;
     private javax.swing.JButton buttonPesquisarProdutos;
     private javax.swing.JButton buttonSair;
     private javax.swing.JButton buttonVerProduto;

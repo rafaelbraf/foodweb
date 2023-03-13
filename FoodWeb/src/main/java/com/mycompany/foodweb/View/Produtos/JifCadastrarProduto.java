@@ -8,7 +8,6 @@ import Util.GerenteDeJanelas;
 import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
-import com.mycompany.foodweb.Service.CategoriaService;
 import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
 import java.util.ArrayList;
@@ -44,8 +43,10 @@ public class JifCadastrarProduto extends javax.swing.JInternalFrame {
         
         DefaultComboBoxModel comboBox = (DefaultComboBoxModel) comboBoxCategorias.getModel();
         comboBox.removeAllElements();        
-        CategoriaService categoriaService = new CategoriaService();
-        Categoria[] listaDeCategorias = categoriaService.pegaCategoriasDoRestaurante(idRestaurante);
+        
+        RestauranteService restauranteService = new RestauranteService();
+        Categoria[] listaDeCategorias = restauranteService.listaCategoriasDoRestaurante(idRestaurante);
+        
         for (int i = 0; i < listaDeCategorias.length; i++) {
             Categoria categoria = listaDeCategorias[i];
             comboBox.addElement(categoria);

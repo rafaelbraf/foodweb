@@ -9,9 +9,11 @@ import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
 import com.mycompany.foodweb.Service.ProdutoService;
 import com.mycompany.foodweb.Service.RestauranteService;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -28,8 +30,23 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
     
     Long idRestaurante;
     
-    public JifEditarProduto() {
+    public JifEditarProduto(Long idRestaurante) {
         initComponents();
+        this.setTitle("Editar Produto");
+        preencheComboBoxCategorias(idRestaurante);
+    }
+    
+    private void preencheComboBoxCategorias(Long idRestaurante) {
+        DefaultComboBoxModel comboBox = (DefaultComboBoxModel) comboBoxCategoriaDoProduto.getModel();
+        comboBox.removeAllElements();
+        
+        RestauranteService restauranteService = new RestauranteService();
+        Categoria[] listaDeCategorias = restauranteService.listaCategoriasDoRestaurante(idRestaurante);
+        
+        for (int i = 0; i < listaDeCategorias.length; i++) {
+            Categoria categoria = listaDeCategorias[i];
+            comboBox.addElement(categoria);
+        }
     }
     
     public void carregaProdutoParaEdicao(int idProduto) {
@@ -52,7 +69,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
 
             textFieldCodigoProduto.setText(Integer.toString(produto.getId()));
             textFieldNomeProduto.setText(produto.getNome());
-            textFieldCategoriaProduto.setText(produto.getCategorias().toString());
+            comboBoxCategoriaDoProduto.setSelectedItem(produto.getCategorias());
             textAreaDescricaoProduto.setText(produto.getDescricao());
             textFieldPrecoProduto.setText(Double.toString(produto.getPreco())); 
             textFieldQuantidadeProduto.setText(quantidadeAtualProduto);
@@ -79,7 +96,6 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         textFieldNomeProduto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        textFieldCategoriaProduto = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaDescricaoProduto = new javax.swing.JTextArea();
@@ -89,6 +105,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
         textFieldQuantidadeProduto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         textFieldCodigoProduto = new javax.swing.JTextField();
+        comboBoxCategoriaDoProduto = new javax.swing.JComboBox<>();
         buttonEditarProduto = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -138,6 +155,8 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
 
         textFieldCodigoProduto.setEditable(false);
 
+        comboBoxCategoriaDoProduto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -158,9 +177,11 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(textFieldNomeProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(textFieldCategoriaProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(185, 185, 185))
+                                    .addComponent(comboBoxCategoriaDoProduto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(41, 41, 41))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,20 +205,18 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textFieldCodigoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textFieldCategoriaProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textFieldNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxCategoriaDoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textFieldNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
@@ -205,10 +224,10 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textFieldQuantidadeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textFieldPrecoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30))
+                .addGap(83, 83, 83))
         );
 
-        buttonEditarProduto.setText("Editar");
+        buttonEditarProduto.setText("Salvar edição");
         buttonEditarProduto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonEditarProdutoMouseClicked(evt);
@@ -235,7 +254,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(318, 318, 318)
-                        .addComponent(buttonEditarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(buttonEditarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -248,7 +267,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(buttonEditarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -262,10 +281,12 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
 
     private void buttonEditarProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonEditarProdutoMouseClicked
         // TODO add your handling code here:
+        Categoria categoria = (Categoria) comboBoxCategoriaDoProduto.getSelectedItem();
+        List<Categoria> listaDeCategorias = new ArrayList<>();
+        listaDeCategorias.add(categoria);
         
         int novoIdProduto = Integer.parseInt(textFieldCodigoProduto.getText());
         String novoNomeProduto = textFieldNomeProduto.getText();
-        String novaCategoriaProduto = textFieldCategoriaProduto.getText();
         String novaDescricaoProduto = textAreaDescricaoProduto.getText();
         String novoPrecoProduto = textFieldPrecoProduto.getText();
         String novaQuantidadeProduto = textFieldQuantidadeProduto.getText();
@@ -277,20 +298,15 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             RestauranteService restauranteService = new RestauranteService();
             Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
             
-            ProdutoService produtoService = new ProdutoService();
-            Produto produto = produtoService.pegaProdutoPorId(novoIdProduto);
-            
-            List<Categoria> categorias = produto.getCategorias();
-            
-            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
-            
+            ProdutoService produtoService = new ProdutoService();            
+            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, listaDeCategorias);            
             Boolean produtoAtualizado = produtoService.atualizaProdutoPorId(novoIdProduto, produtoAlterado);
             
             if (produtoAtualizado) {
-                JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
-            } else {
                 JOptionPane.showMessageDialog(null, "Produto editado com sucesso!");
                 this.dispose();
+            } else {                
+                JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
             }
             
         }
@@ -300,9 +316,12 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
     private void buttonEditarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarProdutoActionPerformed
         // TODO add your handling code here:
         
+        Categoria categoria = (Categoria) comboBoxCategoriaDoProduto.getSelectedItem();
+        List<Categoria> listaDeCategorias = new ArrayList<>();
+        listaDeCategorias.add(categoria);
+        
         int novoIdProduto = Integer.parseInt(textFieldCodigoProduto.getText());
         String novoNomeProduto = textFieldNomeProduto.getText();
-        String novaCategoriaProduto = textFieldCategoriaProduto.getText();
         String novaDescricaoProduto = textAreaDescricaoProduto.getText();
         String novoPrecoProduto = textFieldPrecoProduto.getText();
         String novaQuantidadeProduto = textFieldQuantidadeProduto.getText();
@@ -314,20 +333,15 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
             RestauranteService restauranteService = new RestauranteService();
             Restaurante restaurante = restauranteService.consultarRestaurantePorId(idRestaurante);
             
-            ProdutoService produtoService = new ProdutoService();
-            Produto produto = produtoService.pegaProdutoPorId(novoIdProduto);
-            
-            List<Categoria> categorias = produto.getCategorias();
-            
-            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, categorias);
-            
+            ProdutoService produtoService = new ProdutoService();            
+            Produto produtoAlterado = new Produto(novoNomeProduto, novaDescricaoProduto, Double.valueOf(novoPrecoProduto), Double.valueOf(novaQuantidadeProduto), "www.url.com", restaurante, listaDeCategorias);            
             Boolean produtoAtualizado = produtoService.atualizaProdutoPorId(idAtualProduto, produtoAlterado);
             
             if (produtoAtualizado) {
-                JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
-            } else {
                 JOptionPane.showMessageDialog(null, "Produto editado com sucesso!");
                 this.dispose();
+            } else {                
+                JOptionPane.showMessageDialog(null, "Erro ao editar produto. Por favor, tente novamente.");
             }
             
         }
@@ -337,6 +351,7 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonEditarProduto;
+    private javax.swing.JComboBox<String> comboBoxCategoriaDoProduto;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -349,7 +364,6 @@ public class JifEditarProduto extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea textAreaDescricaoProduto;
-    private javax.swing.JTextField textFieldCategoriaProduto;
     private javax.swing.JTextField textFieldCodigoProduto;
     private javax.swing.JTextField textFieldNomeProduto;
     private javax.swing.JTextField textFieldPrecoProduto;
