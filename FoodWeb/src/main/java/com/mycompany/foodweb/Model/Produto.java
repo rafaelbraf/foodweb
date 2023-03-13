@@ -91,9 +91,16 @@ public class Produto {
         this.categorias = categorias;
     }
     
-    @Override
-    public String toString() {
-        return categorias + ", ";
+    public String categoriasToString() {
+        String categoriasEmString = "";
+        for (int i = 0; i < categorias.size(); i++) {
+            if (i != categorias.size() - 1) {
+                categoriasEmString += categorias.get(i).getNome() + ", ";
+            } else {
+                categoriasEmString += categorias.get(i).getNome();
+            }
+        }
+        return categoriasEmString;
     }
     
 }
