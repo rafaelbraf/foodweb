@@ -2,6 +2,7 @@ package com.mycompany.foodweb.Service;
 
 import Util.Constants;
 import com.google.gson.Gson;
+import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
 import java.io.BufferedReader;
@@ -165,6 +166,43 @@ public class RestauranteService {
             Produto[] listaProdutos = gson.fromJson(output, Produto[].class);
             
             return listaProdutos;
+            
+        } catch (IOException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+        
+        return null;
+        
+    }
+    
+    public Categoria[] listaCategoriasDoRestaurante(Long idRestaurante) {
+        
+        try {
+            
+            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/categorias";
+            
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            
+            if (conn.getResponseCode() != 200) {
+                System.out.println("Erro " + conn.getResponseCode() + " ao consultar Produtos");
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            
+            String output = "";
+            String line;
+            while((line = br.readLine()) != null) {
+                output += line;
+            }
+            
+            conn.disconnect();
+            
+            Gson gson = new Gson();
+            Categoria[] listaDeCategorias = gson.fromJson(output, Categoria[].class);
+            
+            return listaDeCategorias;
             
         } catch (IOException e) {
             System.out.println("Erro: " + e.getMessage());
