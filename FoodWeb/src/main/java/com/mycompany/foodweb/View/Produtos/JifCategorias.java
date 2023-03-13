@@ -49,9 +49,8 @@ public class JifCategorias extends javax.swing.JInternalFrame {
     
     public void preencherCategoriasNaTabela(Long idRestaurante) {
         
-        CategoriaService categoriaService = new CategoriaService();
-        
-        Categoria[] listaDeCategorias = categoriaService.pegaCategoriasDoRestaurante(idRestaurante);
+        RestauranteService restauranteService = new RestauranteService();
+        Categoria[] listaDeCategorias = restauranteService.listaCategoriasDoRestaurante(idRestaurante);
         
         DefaultTableModel tabela = (DefaultTableModel) tabelaCategorias.getModel();
         
@@ -84,8 +83,9 @@ public class JifCategorias extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCategorias = new javax.swing.JTable();
-        buttonAtualizarCategorias = new javax.swing.JButton();
+        buttonEditarCategoria = new javax.swing.JButton();
         buttonNovaCategoria1 = new javax.swing.JButton();
+        buttonAtualizarCategorias = new javax.swing.JButton();
 
         tabelaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,7 +99,7 @@ public class JifCategorias extends javax.swing.JInternalFrame {
                 java.lang.Long.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -112,12 +112,12 @@ public class JifCategorias extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tabelaCategorias);
 
-        buttonAtualizarCategorias.setBackground(new java.awt.Color(0, 153, 255));
-        buttonAtualizarCategorias.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAtualizarCategorias.setText("Atualizar");
-        buttonAtualizarCategorias.addActionListener(new java.awt.event.ActionListener() {
+        buttonEditarCategoria.setBackground(new java.awt.Color(0, 153, 255));
+        buttonEditarCategoria.setForeground(new java.awt.Color(255, 255, 255));
+        buttonEditarCategoria.setText("Editar");
+        buttonEditarCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAtualizarCategoriasActionPerformed(evt);
+                buttonEditarCategoriaActionPerformed(evt);
             }
         });
 
@@ -127,6 +127,15 @@ public class JifCategorias extends javax.swing.JInternalFrame {
         buttonNovaCategoria1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonNovaCategoria1ActionPerformed(evt);
+            }
+        });
+
+        buttonAtualizarCategorias.setBackground(new java.awt.Color(0, 153, 255));
+        buttonAtualizarCategorias.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAtualizarCategorias.setText("Atualizar");
+        buttonAtualizarCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAtualizarCategoriasActionPerformed(evt);
             }
         });
 
@@ -140,7 +149,8 @@ public class JifCategorias extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonAtualizarCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonNovaCategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonNovaCategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonEditarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -151,7 +161,9 @@ public class JifCategorias extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buttonNovaCategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonAtualizarCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonAtualizarCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonEditarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
@@ -159,11 +171,18 @@ public class JifCategorias extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonAtualizarCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAtualizarCategoriasActionPerformed
-               
-        preencherCategoriasNaTabela(idRestauranteRecuperado);
-        
-    }//GEN-LAST:event_buttonAtualizarCategoriasActionPerformed
+    private void buttonEditarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarCategoriaActionPerformed
+        int linhaSelecionada = tabelaCategorias.getSelectedRow();
+        if (linhaSelecionada != -1) {
+            Long idCategoria = Long.valueOf(tabelaCategorias.getValueAt(linhaSelecionada, 0).toString());
+            if (idCategoria != 0) {
+                JifEditarCategoria internalFrameEditarCategoria = new JifEditarCategoria(idCategoria);
+                getParent().add(internalFrameEditarCategoria);
+                internalFrameEditarCategoria.setVisible(true);
+                internalFrameEditarCategoria.setClosable(true);                
+            }
+        }        
+    }//GEN-LAST:event_buttonEditarCategoriaActionPerformed
 
     private void buttonNovaCategoria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNovaCategoria1ActionPerformed
         
@@ -186,9 +205,14 @@ public class JifCategorias extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_buttonNovaCategoria1ActionPerformed
 
+    private void buttonAtualizarCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAtualizarCategoriasActionPerformed
+        preencherCategoriasNaTabela(idRestauranteRecuperado);
+    }//GEN-LAST:event_buttonAtualizarCategoriasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAtualizarCategorias;
+    private javax.swing.JButton buttonEditarCategoria;
     private javax.swing.JButton buttonNovaCategoria1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaCategorias;
