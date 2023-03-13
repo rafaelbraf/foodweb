@@ -13,6 +13,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -52,6 +53,69 @@ public class CategoriaService {
         
         return null;
         
+    }
+    
+    public Categoria pegaCategoriaPorId(Long idCategoria) {
+        
+        try {
+            
+            String url = "http://localhost:3001/categorias/" + idCategoria;
+            
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                System.out.println("Erro ao consultar categoria.");
+            }
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            
+            String output = "";
+            String line;
+            while ((line = br.readLine()) != null) {
+                output += line;
+            }
+            
+            conn.disconnect();
+            
+            Gson gson = new Gson();
+            
+            Categoria categoria = gson.fromJson(output, Categoria.class);
+            return categoria;
+            
+        } catch (IOException e) {
+            System.out.println("Erro ao consultar categoria " + e.getMessage());
+        }
+        
+        return null;
+        
+    }
+    
+    public Boolean atualizaCategoriaPorId(Long idCategoria, Categoria categoria) {
+        
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        
+        try {
+            
+            Gson gson = new Gson();
+            String categoriaJson = gson.toJson(categoria);
+            
+            HttpPut request = new HttpPut("http://localhost:3001/categorias/" + idCategoria);
+            request.setHeader("Content-Type", "application/json");
+            
+            HttpEntity entity = new ByteArrayEntity(categoriaJson.getBytes("UTF-8"));
+            request.setEntity(entity);
+            
+            CloseableHttpResponse response = httpClient.execute(request);
+            StatusLine statusLine = response.getStatusLine();
+            
+            Boolean categoriaAtualizada = statusLine.getStatusCode() == 200;
+            return categoriaAtualizada;
+            
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar categoria por id: " + e.getMessage());
+        }
+        return null;
     }
     
     public Boolean adicionarNovaCategoria(Categoria categoria) {
