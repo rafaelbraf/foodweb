@@ -4,23 +4,22 @@
  */
 package com.mycompany.foodweb.View.Pedidos;
 
-import com.mycompany.foodweb.Model.Cliente;
+import com.mycompany.foodweb.Model.Enums.StatusPedido;
 import com.mycompany.foodweb.Model.Pedido;
 import com.mycompany.foodweb.Service.ClienteService;
 import com.mycompany.foodweb.Service.PedidoService;
 import java.awt.Color;
 import java.awt.Font;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class JifPedidos extends javax.swing.JInternalFrame {
+public final class JifPedidos extends javax.swing.JInternalFrame {
 
     private static JifPedidos internalFramePedidos;
     private static Long idRestauranteRecuperado;
@@ -37,13 +36,34 @@ public class JifPedidos extends javax.swing.JInternalFrame {
         initComponents();
         this.setTitle("Pedidos");
         this.setSize(1200, 680);
-        tabelaPedidosAguardandoAprovacao.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        tabelaPedidosAguardandoAprovacao.getTableHeader().setOpaque(false);
-        tabelaPedidosAguardandoAprovacao.getTableHeader().setBackground(new Color(32, 136, 203));
-        tabelaPedidosAguardandoAprovacao.getTableHeader().setForeground(Color.WHITE);
-        tabelaPedidosAguardandoAprovacao.setRowHeight(25);
-        tabelaPedidosAguardandoAprovacao.setShowVerticalLines(false);
+        List<JTable> listaDeTabelas = new ArrayList<>();
+        listaDeTabelas.add(tabelaPedidosAguardandoAprovacao);
+        listaDeTabelas.add(tabelaPedidosAprovados);
+        listaDeTabelas.add(tabelaPedidosAguardandoEntregador);
+        listaDeTabelas.add(tabelaPedidosConcluidos);
+        listaDeTabelas.add(tabelaPedidosEmAndamento);
+        listaDeTabelas.add(tabelaPedidosEmRotaDeEntrega);
         preenchePedidosNaTabela(idRestaurante);
+        estilizaTabelas(listaDeTabelas);
+    }
+    
+    public void estilizaTabelas(List<JTable> tabelas) {
+        for (int i = 0; i < tabelas.size(); i++) {
+            JTable tabela = tabelas.get(i);
+            tabela.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+            tabela.getTableHeader().setOpaque(false);
+            tabela.getTableHeader().setBackground(new Color(32, 136, 203));
+            tabela.getTableHeader().setForeground(Color.WHITE);
+            tabela.setRowHeight(25);
+            tabela.setShowVerticalLines(false);
+        }
+    }
+    
+    public void limpaRegistrosDasTabelas(List<DefaultTableModel> tabelas) {        
+        for (int i = 0; i < tabelas.size(); i++) {
+            DefaultTableModel tabelaModelo = tabelas.get(i);
+            tabelaModelo.setRowCount(0);
+        }        
     }
     
     public void preenchePedidosNaTabela(Long idRestaurante) {
@@ -52,8 +72,22 @@ public class JifPedidos extends javax.swing.JInternalFrame {
         ClienteService clienteService = new ClienteService();
         Pedido[] listaPedidos = pedidoService.listarTodosOsPedidos(idRestaurante);
         
-        DefaultTableModel tabela = (DefaultTableModel) tabelaPedidosAguardandoAprovacao.getModel();        
-        tabela.setRowCount(0);
+        DefaultTableModel tabelaAguardandoAprovacao = (DefaultTableModel) tabelaPedidosAguardandoAprovacao.getModel();        
+        DefaultTableModel tabelaAprovados = (DefaultTableModel) tabelaPedidosAprovados.getModel();        
+        DefaultTableModel tabelaEmAndamento = (DefaultTableModel) tabelaPedidosEmAndamento.getModel();        
+        DefaultTableModel tabelaEmRotaDeEntrega = (DefaultTableModel) tabelaPedidosEmRotaDeEntrega.getModel();        
+        DefaultTableModel tabelaAguardandoEntregador = (DefaultTableModel) tabelaPedidosAguardandoEntregador.getModel();
+        DefaultTableModel tabelaConcluidos = (DefaultTableModel) tabelaPedidosConcluidos.getModel();
+        
+        List<DefaultTableModel> listaDeTabelas = new ArrayList<>();
+        listaDeTabelas.add(tabelaAguardandoAprovacao);
+        listaDeTabelas.add(tabelaAprovados);
+        listaDeTabelas.add(tabelaEmAndamento);
+        listaDeTabelas.add(tabelaEmRotaDeEntrega);
+        listaDeTabelas.add(tabelaAguardandoEntregador);
+        listaDeTabelas.add(tabelaConcluidos);
+        
+        limpaRegistrosDasTabelas(listaDeTabelas);
         
         TableCellRenderer renderCelula = new AlinharConteudoCentro();
         TableColumn colunaCodigo = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(0);
@@ -74,26 +108,49 @@ public class JifPedidos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Erro ao buscar pedidos.");
         } else {
             
-            int idCliente;
-            
             for (var i = 0; i < listaPedidos.length; i++) {
 
-                String codigoPedido = listaPedidos[i].getCodigo();
-                idCliente = listaPedidos[i].getIdCliente();
-                Cliente cliente = clienteService.pegaClientePorId(idCliente);                
-                String dataHora = listaPedidos[i].getData() + " - " + listaPedidos[i].getHora();
-                int idPedido = listaPedidos[i].getIdPedido();
-                Double valorTotal = listaPedidos[i].getValorTotal();
+                Long idPedido = listaPedidos[i].getId();
+                String dataHoraPedido = listaPedidos[i].getDataHoraPedido();
+                String statusPedido = listaPedidos[i].getStatusPedido();
                 
-                tabela.addRow(new Object[] {
-                    codigoPedido,
-                    dataHora,
-                    cliente.getNome(),
-                    cliente.getTelefone(),
-                    cliente.getEndereco(),
-                    idPedido,
-                    valorTotal
-                });
+                if (statusPedido.equals(StatusPedido.AGUARDANDO_APROVACAO.name())) {
+                    tabelaAguardandoAprovacao.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    });
+                } else if (statusPedido.equals(StatusPedido.APROVADO.name())) {
+                    tabelaAprovados.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    }); 
+                } else if (statusPedido.equals(StatusPedido.EM_PREPARACAO.name())) {
+                    tabelaEmAndamento.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    });
+                } else if (statusPedido.equals(StatusPedido.AGUARDANDO_ENTREGADOR.name())) {
+                    tabelaAguardandoEntregador.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    });
+                } else if (statusPedido.equals(StatusPedido.EM_ROTA_DE_ENTREGA.name())) {
+                    tabelaEmRotaDeEntrega.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    });
+                } else if (statusPedido.equals(StatusPedido.FINALIZADO.name())) {
+                    tabelaConcluidos.addRow(new Object[] {
+                        idPedido,
+                        dataHoraPedido,
+                        statusPedido
+                    });
+                }
                 
             }
             
@@ -125,10 +182,21 @@ public class JifPedidos extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaPedidosAguardandoAprovacao = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tabelaPedidosAprovados = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabelaPedidosEmAndamento = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tabelaPedidosAguardandoEntregador = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tabelaPedidosEmRotaDeEntrega = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tabelaPedidosConcluidos = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(1052, 538));
 
@@ -206,7 +274,7 @@ public class JifPedidos extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -219,54 +287,222 @@ public class JifPedidos extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Aguardando aprovação", jPanel2);
 
+        tabelaPedidosAprovados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(tabelaPedidosAprovados);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Aprovado", jPanel8);
+
+        tabelaPedidosEmAndamento.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tabelaPedidosEmAndamento);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1014, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Em andamento", jPanel3);
+
+        tabelaPedidosAguardandoEntregador.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tabelaPedidosAguardandoEntregador);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1014, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Aguardando Entregador", jPanel4);
+
+        tabelaPedidosEmRotaDeEntrega.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(tabelaPedidosEmRotaDeEntrega);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1014, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Em Rota de Entrega", jPanel5);
+
+        tabelaPedidosConcluidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Data - Hora", "Cliente", "Telefone", "Endereço", "Status", "Valor Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(tabelaPedidosConcluidos);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1014, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Concluídos", jPanel6);
@@ -305,9 +541,20 @@ public class JifPedidos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tabelaPedidosAguardandoAprovacao;
+    private javax.swing.JTable tabelaPedidosAguardandoEntregador;
+    private javax.swing.JTable tabelaPedidosAprovados;
+    private javax.swing.JTable tabelaPedidosConcluidos;
+    private javax.swing.JTable tabelaPedidosEmAndamento;
+    private javax.swing.JTable tabelaPedidosEmRotaDeEntrega;
     // End of variables declaration//GEN-END:variables
 }

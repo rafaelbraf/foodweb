@@ -6,15 +6,10 @@ package com.mycompany.foodweb.View;
 
 import com.mycompany.foodweb.View.Produtos.JifProdutos;
 import Util.GerenteDeJanelas;
-import com.mycompany.foodweb.Service.ProdutoService;
-import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.View.Pedidos.JifPedidos;
 import com.mycompany.foodweb.View.Produtos.JifCategorias;
 
-import java.awt.Color;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.xml.transform.Source;
 
 /**
  *
