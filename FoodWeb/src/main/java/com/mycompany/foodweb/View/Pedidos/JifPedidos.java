@@ -11,6 +11,7 @@ import com.mycompany.foodweb.Service.PedidoService;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -66,11 +67,46 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         }        
     }
     
+    public void adicionaPedidoNaTabela(DefaultTableModel defaultTableModel, Pedido pedido) {
+        defaultTableModel.addRow(new Object[] {
+            pedido.getId(),
+            pedido.getDataHoraPedido(),
+            pedido.getStatusPedido()
+        });
+    }
+    
+    public List<DefaultTableModel> transformaTabelasParaDefaultTableModel(List<JTable> listaDeTabelas) {
+        List<DefaultTableModel> listaDeDefaultTableModel = new ArrayList<>();
+        for (int i = 0; i < listaDeTabelas.size(); i++) {
+            JTable tabela = listaDeTabelas.get(i);
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tabela.getModel();
+            listaDeDefaultTableModel.add(defaultTableModel);
+        }
+        return listaDeDefaultTableModel;
+    }
+    
+    public void defineCellRenderer(List<TableColumn> listaDeTablesColumns) {
+        TableCellRenderer renderCelula = new AlinharConteudoCentro();
+        for (int i = 0; i < listaDeTablesColumns.size(); i++) {
+            TableColumn tableColumn = listaDeTablesColumns.get(i);
+            tableColumn.setCellRenderer(renderCelula);
+        }
+    }
+    
     public void preenchePedidosNaTabela(Long idRestaurante) {
         
         PedidoService pedidoService = new PedidoService();
-        ClienteService clienteService = new ClienteService();
         Pedido[] listaPedidos = pedidoService.listarTodosOsPedidos(idRestaurante);
+        
+        List<JTable> listaTabelas = new ArrayList<>();
+        listaTabelas.add(tabelaPedidosAguardandoAprovacao);
+        listaTabelas.add(tabelaPedidosAprovados);
+        listaTabelas.add(tabelaPedidosEmAndamento);
+        listaTabelas.add(tabelaPedidosEmRotaDeEntrega);
+        listaTabelas.add(tabelaPedidosAguardandoEntregador);
+        listaTabelas.add(tabelaPedidosConcluidos);
+        
+        List<DefaultTableModel> listaDeTabelas = transformaTabelasParaDefaultTableModel(listaTabelas);
         
         DefaultTableModel tabelaAguardandoAprovacao = (DefaultTableModel) tabelaPedidosAguardandoAprovacao.getModel();        
         DefaultTableModel tabelaAprovados = (DefaultTableModel) tabelaPedidosAprovados.getModel();        
@@ -79,17 +115,8 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         DefaultTableModel tabelaAguardandoEntregador = (DefaultTableModel) tabelaPedidosAguardandoEntregador.getModel();
         DefaultTableModel tabelaConcluidos = (DefaultTableModel) tabelaPedidosConcluidos.getModel();
         
-        List<DefaultTableModel> listaDeTabelas = new ArrayList<>();
-        listaDeTabelas.add(tabelaAguardandoAprovacao);
-        listaDeTabelas.add(tabelaAprovados);
-        listaDeTabelas.add(tabelaEmAndamento);
-        listaDeTabelas.add(tabelaEmRotaDeEntrega);
-        listaDeTabelas.add(tabelaAguardandoEntregador);
-        listaDeTabelas.add(tabelaConcluidos);
-        
         limpaRegistrosDasTabelas(listaDeTabelas);
         
-        TableCellRenderer renderCelula = new AlinharConteudoCentro();
         TableColumn colunaCodigo = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(0);
         TableColumn colunaDataHora = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(1);
         TableColumn colunaNomeCliente = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(2);
@@ -97,12 +124,15 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         TableColumn colunaStatusPedido = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(5);
         TableColumn colunaValorTotal = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(6);
         
-        colunaCodigo.setCellRenderer(renderCelula);
-        colunaDataHora.setCellRenderer(renderCelula);
-        colunaNomeCliente.setCellRenderer(renderCelula);
-        colunaTelefoneCliente.setCellRenderer(renderCelula);
-        colunaStatusPedido.setCellRenderer(renderCelula);
-        colunaValorTotal.setCellRenderer(renderCelula);
+        List<TableColumn> listaDeTableColumns = new ArrayList<>();
+        listaDeTableColumns.add(colunaCodigo);
+        listaDeTableColumns.add(colunaDataHora);
+        listaDeTableColumns.add(colunaNomeCliente);
+        listaDeTableColumns.add(colunaTelefoneCliente);
+        listaDeTableColumns.add(colunaStatusPedido);
+        listaDeTableColumns.add(colunaValorTotal);
+        
+        defineCellRenderer(listaDeTableColumns);
         
         if (listaPedidos == null) {
             JOptionPane.showMessageDialog(null, "Erro ao buscar pedidos.");
@@ -110,46 +140,30 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
             
             for (var i = 0; i < listaPedidos.length; i++) {
 
-                Long idPedido = listaPedidos[i].getId();
-                String dataHoraPedido = listaPedidos[i].getDataHoraPedido();
-                String statusPedido = listaPedidos[i].getStatusPedido();
+                Pedido pedido = listaPedidos[i];
+                StatusPedido statusPedido = StatusPedido.valueOf(pedido.getStatusPedido());
                 
-                if (statusPedido.equals(StatusPedido.AGUARDANDO_APROVACAO.name())) {
-                    tabelaAguardandoAprovacao.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    });
-                } else if (statusPedido.equals(StatusPedido.APROVADO.name())) {
-                    tabelaAprovados.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    }); 
-                } else if (statusPedido.equals(StatusPedido.EM_PREPARACAO.name())) {
-                    tabelaEmAndamento.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    });
-                } else if (statusPedido.equals(StatusPedido.AGUARDANDO_ENTREGADOR.name())) {
-                    tabelaAguardandoEntregador.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    });
-                } else if (statusPedido.equals(StatusPedido.EM_ROTA_DE_ENTREGA.name())) {
-                    tabelaEmRotaDeEntrega.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    });
-                } else if (statusPedido.equals(StatusPedido.FINALIZADO.name())) {
-                    tabelaConcluidos.addRow(new Object[] {
-                        idPedido,
-                        dataHoraPedido,
-                        statusPedido
-                    });
+                switch (statusPedido) {
+                    case AGUARDANDO_APROVACAO:
+                        adicionaPedidoNaTabela(tabelaAguardandoAprovacao, pedido);
+                        break;
+                    case APROVADO:
+                        adicionaPedidoNaTabela(tabelaAprovados, pedido);
+                        break;
+                    case EM_PREPARACAO:
+                        adicionaPedidoNaTabela(tabelaEmAndamento, pedido);
+                        break;
+                    case AGUARDANDO_ENTREGADOR:
+                        adicionaPedidoNaTabela(tabelaAguardandoEntregador, pedido);
+                        break;
+                    case EM_ROTA_DE_ENTREGA:
+                        adicionaPedidoNaTabela(tabelaEmRotaDeEntrega, pedido);
+                        break;
+                    case FINALIZADO:
+                        adicionaPedidoNaTabela(tabelaConcluidos, pedido);
+                        break;
+                    default:
+                        throw new AssertionError();
                 }
                 
             }
