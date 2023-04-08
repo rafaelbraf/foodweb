@@ -48,7 +48,7 @@ public class Pedido {
     }    
 
     public String formataDataHoraPedido(String dataHoraPedido) {
-        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.ms");
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         LocalDateTime dateTime = LocalDateTime.parse(dataHoraPedido, dtFormatter);
         return dateTime.toString();
     }

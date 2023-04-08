@@ -151,6 +151,9 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
                         break;
                     case EM_ROTA_DE_ENTREGA:
                         adicionaPedidoNaTabela(tabelaEmRotaDeEntrega, pedido);
+                        break;                    
+                    case ENTREGUE:
+                        adicionaPedidoNaTabela(tabelaConcluidos, pedido);
                         break;
                     case FINALIZADO:
                         adicionaPedidoNaTabela(tabelaConcluidos, pedido);
