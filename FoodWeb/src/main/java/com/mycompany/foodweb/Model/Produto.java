@@ -1,6 +1,5 @@
 package com.mycompany.foodweb.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Produto {
