@@ -1,14 +1,18 @@
 package com.mycompany.foodweb.Model;
 
 import com.google.gson.Gson;
+import com.mycompany.foodweb.Service.ProdutoService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
@@ -113,9 +117,34 @@ public class Service {
             objectAdicionado = statusLine.getStatusCode() == 200;            
         } catch (IOException e) {
             System.out.println(e);
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                Logger.getLogger(ProdutoService.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
         
         return objectAdicionado;
+    }
+    
+    public Boolean deleteRequest(String url) {
+        Boolean objectDeletado = false;
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        
+        try {            
+            HttpDelete deleteRequest = new HttpDelete(url);
+            
+            CloseableHttpResponse response = httpClient.execute(deleteRequest);
+            
+            StatusLine statusLine = response.getStatusLine();
+            
+            objectDeletado = statusLine.getStatusCode() == 200;            
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        
+        return objectDeletado;
     }
     
 }
