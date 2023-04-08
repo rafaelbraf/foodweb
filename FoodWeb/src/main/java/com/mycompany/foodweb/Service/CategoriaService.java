@@ -1,156 +1,37 @@
 package com.mycompany.foodweb.Service;
 
+import Util.Constants;
 import com.google.gson.Gson;
 import com.mycompany.foodweb.Model.Categoria;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import com.mycompany.foodweb.Model.Service;
 
 public class CategoriaService {
     
-    public Categoria[] pegaCategoriasDoRestaurante(Long idRestaurante) {
-        
-        try {
-            
-            String url = "http://localhost:3001/categorias/restaurante/" + idRestaurante;
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseMessage() + " ao tentar obter dados da URL: " + url);
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            String output = "";
-            String line;
-            while ((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            Categoria[] listaDeCategorias = gson.fromJson(output, Categoria[].class);
-            return listaDeCategorias;
-            
-        } catch (IOException exception) {
-            System.out.println("Erro: " + exception.getMessage());
-        }
-        
-        return null;
-        
+    public Categoria[] pegaCategoriasDoRestaurante(Long idRestaurante) {        
+        String url = Constants.BASE_URL_CATEGORIAS + "restaurante/" + idRestaurante;
+        String output = new Service().getRequest(url);
+        Gson gson = new Gson();
+        Categoria[] listaDeCategorias = gson.fromJson(output, Categoria[].class);
+        return listaDeCategorias;
     }
     
     public Categoria pegaCategoriaPorId(Long idCategoria) {
-        
-        try {
-            
-            String url = "http://localhost:3001/categorias/" + idCategoria;
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro ao consultar categoria.");
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            String output = "";
-            String line;
-            while ((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            
-            Categoria categoria = gson.fromJson(output, Categoria.class);
-            return categoria;
-            
-        } catch (IOException e) {
-            System.out.println("Erro ao consultar categoria " + e.getMessage());
-        }
-        
-        return null;
-        
+        String url = Constants.BASE_URL_CATEGORIAS + idCategoria;
+        String output = new Service().getRequest(url);
+        Categoria categoria = new Gson().fromJson(output, Categoria.class);
+        return categoria;
     }
     
     public Boolean atualizaCategoriaPorId(Long idCategoria, Categoria categoria) {
-        
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        
-        try {
-            
-            Gson gson = new Gson();
-            String categoriaJson = gson.toJson(categoria);
-            
-            HttpPut request = new HttpPut("http://localhost:3001/categorias/" + idCategoria);
-            request.setHeader("Content-Type", "application/json");
-            
-            HttpEntity entity = new ByteArrayEntity(categoriaJson.getBytes("UTF-8"));
-            request.setEntity(entity);
-            
-            CloseableHttpResponse response = httpClient.execute(request);
-            StatusLine statusLine = response.getStatusLine();
-            
-            Boolean categoriaAtualizada = statusLine.getStatusCode() == 200;
-            return categoriaAtualizada;
-            
-        } catch (IOException e) {
-            System.out.println("Erro ao atualizar categoria por id: " + e.getMessage());
-        }
-        return null;
+        String url = Constants.BASE_URL_CATEGORIAS + idCategoria;
+        Boolean categoriaAtualizada = new Service().putRequest(url, categoria);
+        return categoriaAtualizada;
     }
     
     public Boolean adicionarNovaCategoria(Categoria categoria) {
-        
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        
-        try {
-            
-            Gson gson = new Gson();
-            String categoriaJson = gson.toJson(categoria);
-            
-            HttpPost request = new HttpPost("http://localhost:3001/categorias");
-            request.setHeader("Content-Type", "application/json");
-            
-            HttpEntity entity = new ByteArrayEntity(categoriaJson.getBytes("UTF-8"));
-            request.setEntity(entity);
-            
-            CloseableHttpResponse response = httpClient.execute(request);
-            StatusLine statusLine = response.getStatusLine();
-            
-            Boolean categoriaAdicionada = statusLine.getStatusCode() == 201;
-            return categoriaAdicionada;
-            
-        } catch (IOException e) {
-            System.out.println("Erro ao tentar cadastrar nova categoria: " + e.getMessage());
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException ex) {
-                Logger.getLogger(CategoriaService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        return false;
-        
+        String url = Constants.BASE_URL_CATEGORIAS;
+        Boolean categoriaAdicionada = new Service().postRequest(url, categoria);
+        return categoriaAdicionada;
     }
     
 }
