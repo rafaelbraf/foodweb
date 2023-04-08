@@ -90,7 +90,7 @@ public class Service {
             
             StatusLine statusLine = response.getStatusLine();
             
-            objectAtualizado = statusLine.getStatusCode() == 200;
+            objectAtualizado = statusLine.getStatusCode() == 201;
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -114,7 +114,7 @@ public class Service {
             
             StatusLine statusLine = response.getStatusLine();
             
-            objectAdicionado = statusLine.getStatusCode() == 200;            
+            objectAdicionado = statusLine.getStatusCode() == 201;
         } catch (IOException e) {
             System.out.println(e);
         } finally {
