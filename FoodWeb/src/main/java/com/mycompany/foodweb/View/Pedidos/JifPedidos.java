@@ -6,12 +6,10 @@ package com.mycompany.foodweb.View.Pedidos;
 
 import com.mycompany.foodweb.Model.Enums.StatusPedido;
 import com.mycompany.foodweb.Model.Pedido;
-import com.mycompany.foodweb.Service.ClienteService;
 import com.mycompany.foodweb.Service.PedidoService;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -24,6 +22,7 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
 
     private static JifPedidos internalFramePedidos;
     private static Long idRestauranteRecuperado;
+    private List<JTable> listaDeTabelas = new ArrayList<>();
     
     public static JifPedidos getInstancia(Long idRestaurante) {
         if (internalFramePedidos == null) {
@@ -37,7 +36,6 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         initComponents();
         this.setTitle("Pedidos");
         this.setSize(1200, 680);
-        List<JTable> listaDeTabelas = new ArrayList<>();
         listaDeTabelas.add(tabelaPedidosAguardandoAprovacao);
         listaDeTabelas.add(tabelaPedidosAprovados);
         listaDeTabelas.add(tabelaPedidosAguardandoEntregador);
@@ -70,12 +68,16 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
     public void adicionaPedidoNaTabela(DefaultTableModel defaultTableModel, Pedido pedido) {
         defaultTableModel.addRow(new Object[] {
             pedido.getId(),
-            pedido.getDataHoraPedido(),
-            pedido.getStatusPedido()
+            pedido.formataDataHoraPedido(pedido.getDataHoraPedido()),
+            "-",
+            "-",
+            "-",            
+            pedido.getStatusPedido(),
+            10.0
         });
     }
     
-    public List<DefaultTableModel> transformaTabelasParaDefaultTableModel(List<JTable> listaDeTabelas) {
+    public List<DefaultTableModel> transformaJTablesParaDefaultsTableModel(List<JTable> listaDeTabelas) {
         List<DefaultTableModel> listaDeDefaultTableModel = new ArrayList<>();
         for (int i = 0; i < listaDeTabelas.size(); i++) {
             JTable tabela = listaDeTabelas.get(i);
@@ -98,16 +100,6 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         PedidoService pedidoService = new PedidoService();
         Pedido[] listaPedidos = pedidoService.listarTodosOsPedidos(idRestaurante);
         
-        List<JTable> listaTabelas = new ArrayList<>();
-        listaTabelas.add(tabelaPedidosAguardandoAprovacao);
-        listaTabelas.add(tabelaPedidosAprovados);
-        listaTabelas.add(tabelaPedidosEmAndamento);
-        listaTabelas.add(tabelaPedidosEmRotaDeEntrega);
-        listaTabelas.add(tabelaPedidosAguardandoEntregador);
-        listaTabelas.add(tabelaPedidosConcluidos);
-        
-        List<DefaultTableModel> listaDeTabelas = transformaTabelasParaDefaultTableModel(listaTabelas);
-        
         DefaultTableModel tabelaAguardandoAprovacao = (DefaultTableModel) tabelaPedidosAguardandoAprovacao.getModel();        
         DefaultTableModel tabelaAprovados = (DefaultTableModel) tabelaPedidosAprovados.getModel();        
         DefaultTableModel tabelaEmAndamento = (DefaultTableModel) tabelaPedidosEmAndamento.getModel();        
@@ -115,7 +107,8 @@ public final class JifPedidos extends javax.swing.JInternalFrame {
         DefaultTableModel tabelaAguardandoEntregador = (DefaultTableModel) tabelaPedidosAguardandoEntregador.getModel();
         DefaultTableModel tabelaConcluidos = (DefaultTableModel) tabelaPedidosConcluidos.getModel();
         
-        limpaRegistrosDasTabelas(listaDeTabelas);
+        List<DefaultTableModel> listaDeDefaultTableModel = transformaJTablesParaDefaultsTableModel(listaDeTabelas);
+        limpaRegistrosDasTabelas(listaDeDefaultTableModel);
         
         TableColumn colunaCodigo = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(0);
         TableColumn colunaDataHora = tabelaPedidosAguardandoAprovacao.getColumnModel().getColumn(1);

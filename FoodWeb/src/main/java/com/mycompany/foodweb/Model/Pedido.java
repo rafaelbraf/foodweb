@@ -1,5 +1,8 @@
 package com.mycompany.foodweb.Model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Pedido {
     
     Long id;
@@ -42,6 +45,12 @@ public class Pedido {
 
     public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
+    }    
+
+    public String formataDataHoraPedido(String dataHoraPedido) {
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.ms");
+        LocalDateTime dateTime = LocalDateTime.parse(dataHoraPedido, dtFormatter);
+        return dateTime.toString();
     }
     
 }
