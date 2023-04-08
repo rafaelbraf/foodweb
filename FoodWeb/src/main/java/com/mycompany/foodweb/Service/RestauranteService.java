@@ -64,7 +64,12 @@ public class RestauranteService {
             }
             
         } catch(IOException e) {
-            JOptionPane.showMessageDialog(null, "Erro: " + e.getLocalizedMessage() + ". Caso o problema persista entre em contato com nosso suporte.");
+            JOptionPane.showMessageDialog(
+                    null, 
+                    "Erro: " + e.getLocalizedMessage() + ".\nCaso o problema persista entre em contato com nosso suporte.",
+                    "Erro ao fazer login",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
         
         return null;
@@ -179,7 +184,7 @@ public class RestauranteService {
         
         try {
             
-            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/categorias";
+            String url = "http://localhost:3001/categorias/restaurante/" + idRestaurante;
             
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
