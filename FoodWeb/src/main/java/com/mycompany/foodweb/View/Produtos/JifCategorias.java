@@ -49,8 +49,7 @@ public class JifCategorias extends javax.swing.JInternalFrame {
     
     public void preencherCategoriasNaTabela(Long idRestaurante) {
         
-        RestauranteService restauranteService = new RestauranteService();
-        Categoria[] listaDeCategorias = restauranteService.listaCategoriasDoRestaurante(idRestaurante);
+        Categoria[] listaDeCategorias = new CategoriaService().pegaCategoriasDoRestaurante(idRestaurante);
         
         DefaultTableModel tabela = (DefaultTableModel) tabelaCategorias.getModel();
         
