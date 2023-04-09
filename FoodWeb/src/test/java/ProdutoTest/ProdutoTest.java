@@ -10,8 +10,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProdutoTest {
+    
+    String email = "teste2@mail.com";
+    String senha = "123456";
+    
     public void testeInsercaoDeProduto() {        
-        Restaurante restaurante = new Restaurante("teste2@mail.com", "123456");
+        Restaurante restaurante = new Restaurante(email, senha);
         RestauranteService restauranteService = new RestauranteService();
         Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);
         
@@ -23,4 +27,29 @@ public class ProdutoTest {
         
         assertEquals(true, produtoAdicionado);
     }
+    
+    public void testeEdicaoDeProduto() {
+        Restaurante restaurante = new Restaurante(email, senha);
+        
+        RestauranteService restauranteService = new RestauranteService();
+        Restaurante restauranteLogado = restauranteService.fazerLoginComEmailESenha(restaurante);        
+        Produto[] arrayProdutos = restauranteService.listaProdutosDoRestaurante(restauranteLogado.getId());
+        
+        Produto produto;
+        if (arrayProdutos.length > 0) {
+            produto = arrayProdutos[0];
+        } else {
+            return;
+        }
+        
+        produto.setDescricao("Teste Edição");
+        produto.setNome("Teste Edição");
+        produto.setPreco(2.0);
+        produto.setQuantidade(1.0);
+        
+        Boolean produtoAtualizado = new ProdutoService().atualizaProdutoPorId(produto.getId(), produto);
+        
+        assertEquals(true, produtoAtualizado);
+    }
+    
 }
