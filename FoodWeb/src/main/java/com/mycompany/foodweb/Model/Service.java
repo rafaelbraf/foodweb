@@ -90,7 +90,7 @@ public class Service {
             
             StatusLine statusLine = response.getStatusLine();
             
-            objectAtualizado = statusLine.getStatusCode() == 201;
+            objectAtualizado = statusLine.getStatusCode() == 200;
         } catch (IOException e) {
             System.out.println(e);
         }
