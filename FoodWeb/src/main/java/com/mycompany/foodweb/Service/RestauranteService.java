@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.mycompany.foodweb.Model.Categoria;
 import com.mycompany.foodweb.Model.Produto;
 import com.mycompany.foodweb.Model.Restaurante;
+import com.mycompany.foodweb.Model.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,145 +77,31 @@ public class RestauranteService {
     }
     
     public Restaurante consultarRestaurantePorId(Long idRestaurante) {
-        
-        try {
-            
-            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante;
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseCode() + " ao tentar obter os dados da url: " + url);
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String output = "";
-            String line;
-            while ((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            Restaurante restaurante = gson.fromJson(output, Restaurante.class);
-            return restaurante;
-            
-        } catch (IOException exception) {
-            System.out.println("Erro: " + exception.getMessage());
-        }
-        
-        return null;
-        
+        String url = Constants.BASE_URL_RESTAURANTES + idRestaurante;
+        String output = new Service().getRequest(url);
+        Restaurante restaurante = new Gson().fromJson(output, Restaurante.class);
+        return restaurante;
     }
     
     public Produto[] listaProdutosDoRestaurante(Long idRestaurante) {
-        
-        try {
-            
-            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos";
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseCode() + " ao tentar obter os dados da url: " + url);
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String output = "";
-            String line;
-            while((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            Produto[] listaProdutos = gson.fromJson(output, Produto[].class);
-            return listaProdutos;
-            
-        } catch(IOException exception) {
-            System.out.println("Erro: " + exception.getMessage());
-        }
-        
-        return null;
-        
+        String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos";
+        String output = new Service().getRequest(url);
+        Produto[] arrayProdutos = new Gson().fromJson(output, Produto[].class);
+        return arrayProdutos;
     }
     
     public Produto[] listaProdutosDoRestaurantePorNome(Long idRestaurante, String nome) {
-        
-        try {
-            
-            String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos/query=" + nome;
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseCode() + " ao consultar Produtos");
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            String output = "";
-            String line;
-            while((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            Produto[] listaProdutos = gson.fromJson(output, Produto[].class);
-            
-            return listaProdutos;
-            
-        } catch (IOException e) {
-            System.out.println("Erro: " + e.getMessage());
-        }
-        
-        return null;
-        
+        String url = Constants.BASE_URL_RESTAURANTES + idRestaurante + "/produtos/query=" + nome;
+        String output = new Service().getRequest(url);
+        Produto[] arrayProdutos = new Gson().fromJson(output, Produto[].class);
+        return arrayProdutos;
     }
     
     public Categoria[] listaCategoriasDoRestaurante(Long idRestaurante) {
-        
-        try {
-            
-            String url = "http://localhost:3001/categorias/restaurante/" + idRestaurante;
-            
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseCode() + " ao consultar Produtos");
-            }
-            
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            String output = "";
-            String line;
-            while((line = br.readLine()) != null) {
-                output += line;
-            }
-            
-            conn.disconnect();
-            
-            Gson gson = new Gson();
-            Categoria[] listaDeCategorias = gson.fromJson(output, Categoria[].class);
-            
-            return listaDeCategorias;
-            
-        } catch (IOException e) {
-            System.out.println("Erro: " + e.getMessage());
-        }
-        
-        return null;
-        
+        String url = Constants.BASE_URL_CATEGORIAS + "restaurante/" + idRestaurante;
+        String output = new Service().getRequest(url);
+        Categoria[] arrayCategorias = new Gson().fromJson(output, Categoria[].class);
+        return arrayCategorias;
     }
     
 }
